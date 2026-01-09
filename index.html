@@ -3,120 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TiTiroUnPugnoSulNaso.com</title>
+    <title>Ti Tiro Un Pugno Sul Naso</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
-        /* Reset di base */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* --- STILI DI BASE (Uguali a prima) --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #e0e0e0; /* Grigio chiaro classico */
-            font-family: 'Press Start 2P', cursive; /* Font pixel */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            color: #000;
-        }
-
-        /* Header in alto */
-        header {
-            background: #fff;
-            border: 4px solid #000;
-            padding: 15px 20px;
-            margin-bottom: 30px;
-            box-shadow: 6px 6px 0px #000; /* Ombra solida retro */
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        h1 {
-            font-size: 1.2rem; /* Dimensione gestibile su mobile */
-            line-height: 1.5;
-            text-transform: uppercase;
-        }
-
-        /* Il contenitore principale rosso */
-        .card {
-            background-color: #fff;
-            border: 5px solid #ff0000; /* Bordo rosso spesso */
-            padding: 30px;
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .card-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        p {
-            font-size: 1rem;
-            line-height: 1.8;
-            text-transform: uppercase;
-        }
-
-        /* Gestione dell'immagine */
-        .product-img {
-            max-width: 200px;
-            width: 100%;
-            height: auto;
-            border: 2px solid #ddd;
-            padding: 5px;
-            background: white;
-            transform: rotate(-3deg); /* Una leggera inclinazione per stile */
-            transition: transform 0.3s ease;
-        }
-
-        .product-img:hover {
-            transform: rotate(0deg) scale(1.05);
-        }
-
-        /* Bottone Donate */
-        .btn {
-            background-color: #d3d3d3;
-            border: 4px solid #000;
-            color: #000;
-            padding: 15px 30px;
+            background-color: #e0e0e0;
             font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 4px 4px 0px #000;
-            transition: all 0.1s;
-            margin-top: 20px;
-            display: inline-block;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 20px; color: #000; overflow-x: hidden; /* Evita scroll orizzontale durante la pioggia */
+        }
+        header {
+            background: #fff; border: 4px solid #000; padding: 15px 20px; margin-bottom: 30px;
+            box-shadow: 6px 6px 0px #000; text-align: center; width: 100%; max-width: 600px;
+        }
+        h1 { font-size: 1.2rem; line-height: 1.5; text-transform: uppercase; }
+        .card {
+            background-color: #fff; border: 5px solid #ff0000; padding: 30px; width: 100%; max-width: 500px;
+            text-align: center; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); position: relative; z-index: 10; /* La card sta sopra la pioggia */
+        }
+        .card-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        p { font-size: 1rem; line-height: 1.8; text-transform: uppercase; }
+        .product-img {
+            max-width: 200px; width: 100%; height: auto; border: 2px solid #ddd; padding: 5px;
+            background: white; transform: rotate(-3deg); transition: transform 0.3s ease;
+        }
+        .btn {
+            background-color: #d3d3d3; border: 4px solid #000; color: #000; padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive; font-size: 1rem; cursor: pointer; text-decoration: none;
+            box-shadow: 4px 4px 0px #000; transition: all 0.1s; margin-top: 20px; display: inline-block; user-select: none;
+        }
+        .btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; }
+        .btn:hover { background-color: #ff0000; color: #fff; }
+
+        /* --- NUOVI STILI PER LA PIOGGIA --- */
+        .falling-item {
+            position: fixed; /* Posizione fissa rispetto alla finestra */
+            top: -100px; /* Partono fuori dallo schermo in alto */
+            z-index: 1; /* Stanno dietro la card principale */
+            pointer-events: none; /* Non si possono cliccare, il mouse ci passa attraverso */
+            width: 60px; /* Dimensione delle scatoline che cadono */
+            height: auto;
+            /* Animazione di caduta definita sotto */
+            animation: fall linear forwards; 
         }
 
-        .btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px #000;
+        /* Definizione dell'animazione */
+        @keyframes fall {
+            to {
+                transform: translateY(120vh) rotate(360deg); /* Cadono oltre il fondo e ruotano */
+            }
         }
 
-        .btn:hover {
-            background-color: #ff0000;
-            color: #fff;
-        }
-
-        /* Ottimizzazione Mobile */
+        /* Mobile optimization */
         @media (max-width: 480px) {
-            h1 { font-size: 0.9rem; }
-            p { font-size: 0.8rem; }
-            .card { padding: 20px; }
-            .product-img { max-width: 150px; }
+            h1 { font-size: 0.9rem; } p { font-size: 0.8rem; } .card { padding: 20px; } .product-img { max-width: 150px; }
         }
     </style>
 </head>
@@ -135,12 +78,60 @@
                 DI FRIGINTINI
             </p>
 
-            <img src="gaviscon.png" alt="Scatola di Gaviscon" class="product-img">
+            <img src="gaviscon.png" alt="Scatola di Gaviscon" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=SERVE+GAVISCON.PNG'">
 
-            <a href="#" class="btn">DONA ORA</a>
+            <a href="#" class="btn" id="donaBtn">DONA ORA</a>
         </div>
     </main>
 
+    <script>
+        const donaBtn = document.getElementById('donaBtn');
+        const imageSource = 'gaviscon.png'; // Nome del file da riciclare
+
+        donaBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Evita che il link salti a inizio pagina
+
+            // Numero di elementi da far cadere
+            const count = 30; 
+
+            for (let i = 0; i < count; i++) {
+                createFallingItem();
+            }
+        });
+
+        function createFallingItem() {
+            const img = document.createElement('img');
+            img.src = imageSource;
+            img.classList.add('falling-item');
+
+            // --- Randomizzazione ---
+            
+            // Posizione orizzontale casuale (da 0 a 100% della larghezza schermo)
+            img.style.left = Math.random() * 100 + 'vw';
+
+            // Durata della caduta casuale (tra 1s e 3s) per non farli cadere tutti assieme
+            const duration = Math.random() * 2 + 1;
+            img.style.animationDuration = duration + 's';
+
+            // Ritardo di partenza casuale (tra 0s e 1.5s)
+            const delay = Math.random() * 1.5;
+            img.style.animationDelay = delay + 's';
+            
+            // Dimensione leggermente variabile (tra 40px e 80px)
+            const size = Math.random() * 40 + 40; 
+            img.style.width = size + 'px';
+
+            // Aggiungi l'immagine al corpo della pagina
+            document.body.appendChild(img);
+
+            // --- Pulizia ---
+            // Rimuovi l'elemento dal DOM una volta finita l'animazione per non intasare la memoria
+            // Tempo totale = durata animazione + ritardo + un piccolo margine di sicurezza
+            setTimeout(() => {
+                img.remove();
+            }, (duration + delay + 1) * 1000); 
+        }
+    </script>
+
 </body>
 </html>
-
