@@ -20,17 +20,16 @@
             min-height: 100vh;
             padding: 20px;
             color: #000;
-            /* SOLUZIONE AL TREMOLIO: Forza la barra di scorrimento verticale sempre visibile */
+            /* STOP AL TREMOLIO: La barra di scorrimento c'è sempre */
             overflow-y: scroll; 
-            /* Nasconde quello che esce orizzontalmente */
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Contenitore per il contenuto principale per tenerlo sopra la pioggia */
+        /* Wrapper per tenere il sito SOPRA la pioggia */
         .content-wrapper {
             position: relative;
-            z-index: 10; /* Più alto della pioggia */
+            z-index: 10; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -50,12 +49,14 @@
         .card-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         p { font-size: 1rem; line-height: 1.8; text-transform: uppercase; }
         
+        /* Stile Immagine */
         .product-img {
             max-width: 200px; width: 100%; height: auto; border: 2px solid #ddd; padding: 5px;
             background: white; transform: rotate(-3deg); transition: transform 0.3s ease;
         }
         .product-img:hover { transform: rotate(0deg) scale(1.05); }
         
+        /* Stile Bottone */
         .btn {
             background-color: #d3d3d3; border: 4px solid #000; color: #000; padding: 15px 30px;
             font-family: 'Press Start 2P', cursive; font-size: 1rem; cursor: pointer; text-decoration: none;
@@ -64,15 +65,15 @@
         .btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; }
         .btn:hover { background-color: #ff0000; color: #fff; }
 
-        /* --- STILI PER LA PIOGGIA --- */
+        /* --- STILI PIOGGIA --- */
         .falling-item {
             position: fixed;
-            top: -150px; /* Partono più in alto */
-            z-index: 1; /* Stanno DIETRO il contenuto principale */
+            top: -150px; 
+            z-index: 1; /* DIETRO al sito */
             pointer-events: none;
             width: 60px;
             height: auto;
-            will-change: transform; /* Ottimizza le performance */
+            will-change: transform;
             animation: fall linear forwards; 
         }
 
@@ -102,7 +103,7 @@
                     DI FRIGINTINI
                 </p>
 
-                <img id="main-product-img" src="" alt="Scatola di Gaviscon" class="product-img">
+                <img src="gaviscon.png" alt="Scatola di Gaviscon" class="product-img">
 
                 <a href="#" class="btn" id="donaBtn">DONA ORA</a>
             </div>
@@ -110,21 +111,15 @@
     </div>
 
     <script>
-        // --- DATI IMMAGINE (Base64) ---
-        // Questa stringa lunghissima È l'immagine. Non toccarla!
-        const gavisconBase64 = "data:image/jpeg;base64,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";
-
-        // --- CODICE PRINCIPALE ---
         const donaBtn = document.getElementById('donaBtn');
-        const mainProductImg = document.getElementById('main-product-img');
-
-        // Imposta l'immagine centrale all'avvio
-        mainProductImg.src = gavisconBase64;
+        
+        // Definiamo il nome del file da usare per la pioggia
+        const imageFile = 'gaviscon.png';
 
         donaBtn.addEventListener('click', function(e) {
             e.preventDefault();
 
-            // Numero di elementi da far cadere
+            // Quanti ne cadono?
             const count = 30; 
 
             for (let i = 0; i < count; i++) {
@@ -134,31 +129,27 @@
 
         function createFallingItem() {
             const img = document.createElement('img');
-            // Usa la stessa immagine Base64 per la pioggia
-            img.src = gavisconBase64;
+            img.src = imageFile; // Usa il tuo file png
             img.classList.add('falling-item');
 
-            // --- Randomizzazione ---
-            // Posizione orizzontale casuale
-            img.style.left = Math.random() * 95 + 'vw'; // 95% per evitare che esca troppo a destra
+            // Posizione casuale
+            img.style.left = Math.random() * 95 + 'vw'; 
 
-            // Durata della caduta casuale (tra 1s e 3s)
+            // Velocità casuale
             const duration = Math.random() * 2 + 1.5;
             img.style.animationDuration = duration + 's';
 
-            // Ritardo di partenza casuale (tra 0s e 1s)
+            // Ritardo casuale
             const delay = Math.random() * 1;
             img.style.animationDelay = delay + 's';
             
-            // Dimensione leggermente variabile (tra 40px e 70px)
+            // Grandezza casuale
             const size = Math.random() * 30 + 40; 
             img.style.width = size + 'px';
 
-            // Aggiungi l'immagine direttamente al body
             document.body.appendChild(img);
 
-            // --- Pulizia ---
-            // Rimuovi l'elemento dopo che l'animazione è finita
+            // Pulizia memoria a fine animazione
             setTimeout(() => {
                 img.remove();
             }, (duration + delay + 0.5) * 1000); 
