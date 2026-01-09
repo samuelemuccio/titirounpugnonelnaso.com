@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SOS NASO FRIGINTINI</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
@@ -10,6 +10,12 @@
         /* --- STILI DI BASE --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        html, body {
+            overscroll-behavior: none; /* Blocca il "tira giù per aggiornare" */
+            width: 100%;
+            height: 100%;
+        }
+
         body {
             background-color: #e0e0e0;
             font-family: 'Press Start 2P', cursive;
@@ -17,129 +23,125 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding-top: 60px; /* Spazio per la barra scorrevole */
+            padding-top: 50px; 
             color: #000;
             overflow-y: scroll; 
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- BARRA SCORREVOLE (NEWS) --- */
+        /* --- BARRA NEWS --- */
         .breaking-news {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            background: yellow;
-            border-bottom: 4px solid black;
-            padding: 10px 0;
-            z-index: 100;
-            white-space: nowrap;
-            overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: #ffff00; border-bottom: 4px solid black;
+            padding: 8px 0; z-index: 200; white-space: nowrap; overflow: hidden;
+            pointer-events: none;
         }
-        
         .breaking-news p {
-            display: inline-block;
-            font-size: 0.8rem;
-            animation: scroll-text 10s linear infinite;
-            color: red;
-            font-weight: bold;
+            display: inline-block; font-size: 0.6rem; color: red; font-weight: bold;
+            animation: scroll-text 20s linear infinite;
         }
-
         @keyframes scroll-text {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
 
-        /* --- CONTENITORE PRINCIPALE --- */
+        /* --- LAYOUT --- */
         .content-wrapper {
-            position: relative;
-            z-index: 10; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding: 20px;
+            position: relative; z-index: 10; display: flex; flex-direction: column;
+            align-items: center; width: 100%; padding: 10px;
+            padding-bottom: 50px;
         }
 
         header {
-            background: #fff; border: 4px solid #000; padding: 15px 20px; margin-bottom: 20px;
+            background: #fff; border: 4px solid #000; padding: 10px 15px; margin-bottom: 15px;
             box-shadow: 6px 6px 0px #000; text-align: center; width: 100%; max-width: 600px;
         }
-        h1 { font-size: 1rem; line-height: 1.5; text-transform: uppercase; color: #ff0000; }
+        h1 { font-size: 0.8rem; line-height: 1.5; text-transform: uppercase; color: #cc0000; }
         
         /* --- CARD --- */
         .card {
-            background-color: #fff; border: 5px solid #ff0000; padding: 30px; width: 100%; max-width: 500px;
-            text-align: center; box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
+            background-color: #fff; border: 5px solid #ff0000; padding: 15px; width: 100%; max-width: 500px;
+            text-align: center; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); margin-bottom: 20px;
         }
-        .card-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        p { font-size: 0.9rem; line-height: 1.8; text-transform: uppercase; }
+        .card-content { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        p { font-size: 0.7rem; line-height: 1.6; text-transform: uppercase; }
         
-        .highlight { background: yellow; padding: 0 5px; }
+        .highlight { background: yellow; padding: 0 5px; font-weight: bold; }
 
         .product-img {
-            max-width: 200px; width: 100%; height: auto; border: 2px solid #ddd; padding: 5px;
-            background: white; transform: rotate(-3deg); transition: transform 0.3s ease;
+            max-width: 150px; width: 100%; height: auto; border: 2px solid #ddd; padding: 5px;
+            background: white; transform: rotate(-3deg); transition: transform 0.1s ease;
         }
         
-        /* --- CONTATORE --- */
-        .counter-box {
-            background: black; color: lime; padding: 10px; border: 2px solid grey;
-            font-size: 0.8rem; margin-top: 10px;
+        /* --- STATISTICHE --- */
+        .stats-container {
+            width: 100%; border: 3px solid #000; background: #eee; padding: 10px;
+            font-size: 0.6rem; margin-top: 5px; display: flex; flex-direction: column; gap: 5px;
         }
 
-        /* --- BOTTONE TREMOLANTE --- */
+        .acid-box { color: red; font-weight: bold;}
+        .donation-box { color: blue; }
+
+        /* --- BOTTONE --- */
         .btn {
-            background-color: #ffcccc; border: 4px solid #000; color: #000; padding: 15px 20px;
-            font-family: 'Press Start 2P', cursive; font-size: 0.9rem; cursor: pointer; text-decoration: none;
-            box-shadow: 4px 4px 0px #000; display: inline-block; user-select: none;
-            animation: shake 0.5s infinite; /* Tremolio costante */
+            background-color: #ffcccc; border: 4px solid #000; color: #000; padding: 15px 10px; width: 100%;
+            font-family: 'Press Start 2P', cursive; font-size: 0.8rem; cursor: pointer;
+            box-shadow: 4px 4px 0px #000; display: inline-block; user-select: none; margin-top: 10px;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            transition: all 0.1s;
+        }
+        /* Stato disabilitato (Cooldown) */
+        .btn:disabled {
+            background-color: #999; color: #fff; border-color: #555;
+            transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; cursor: not-allowed;
         }
         
-        .btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; }
-        .btn:hover { background-color: #ff0000; color: #fff; animation: none; }
+        .btn:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; background-color: #55ff55; }
 
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        /* --- GRIGLIA RECENSIONI (Nuovo Layout) --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Due colonne */
+            gap: 10px;
+            width: 100%; max-width: 500px;
+            margin-top: 20px;
         }
 
-        /* --- FAKE REVIEWS --- */
-        .reviews {
-            width: 100%; max-width: 500px; text-align: left; font-size: 0.7rem; color: #555;
-            background: #fff; border: 2px solid black; padding: 10px; margin-top: 20px;
+        .review-card {
+            background: #fff; border: 2px solid #000; padding: 8px;
+            font-size: 0.5rem; text-align: left;
+            box-shadow: 3px 3px 0px #ccc;
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 100px; /* Altezza fissa per allineamento */
+            overflow: hidden;
         }
-        .review-item { margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+
+        .review-author { font-weight: bold; margin-bottom: 5px; color: #d32f2f; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
+        .review-text { line-height: 1.3; flex-grow: 1; }
+        .stars { color: gold; text-shadow: 1px 1px 0 #000; margin-top: 5px; text-align: right;}
 
         /* --- PIOGGIA --- */
         .falling-item {
-            position: fixed; top: -150px; z-index: 100; pointer-events: none;
-            width: 60px; height: auto; will-change: transform; animation: fall linear forwards; 
+            position: fixed; top: -100px; z-index: 100; pointer-events: none;
+            width: 50px; height: auto; will-change: transform; animation: fall linear forwards; 
         }
 
         @keyframes fall {
-            from { transform: translateY(0) rotate(0deg); }
-            to { transform: translateY(130vh) rotate(360deg); }
+            to { transform: translateY(110vh) rotate(360deg); }
         }
 
         @media (max-width: 480px) {
-            h1 { font-size: 0.8rem; } p { font-size: 0.7rem; } .product-img { max-width: 140px; }
+            .reviews-grid { grid-template-columns: 1fr; } /* Una colonna su mobile */
+            .review-card { height: auto; min-height: 80px; }
+            h1 { font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="breaking-news">
-        <p>⚠️ ALLERTA METEO A FRIGINTINI: PREVISTI FORTI PUGNI SUL NASO E ACIDITÀ DIFFUSA -- SI CONSIGLIA DI RESTARE CALMI -- ⚠️</p>
+        <p>⚠️ ULTIM'ORA: LIVELLI DI ACIDITÀ A FRIGINTINI FUORI SCALA -- RISCHIO PUGNO SUL NASO IMMINENTE -- ⚠️</p>
     </div>
 
     <div class="content-wrapper">
@@ -150,74 +152,174 @@
         <main class="card">
             <div class="card-content">
                 <p>
-                    L'ACIDITÀ HA RAGGIUNTO<br>
-                    LIVELLI CRITICI.<br><br>
-                    <span class="highlight">DONA UN GAVISCON</span><br>
-                    PRIMA CHE PARTA<br>
-                    IL DESTRO.
+                    ATTENZIONE!<br>
+                    SI STA AGITANDO.<br><br>
+                    <span class="highlight">ABBASSA L'ACIDITÀ</span><br>
+                    O PRENDI IL DESTRO.
                 </p>
 
-                <img src="gaviscon.png" alt="Scatola di Gaviscon" class="product-img">
+                <img src="gaviscon.png" alt="Gaviscon" class="product-img" id="product-img">
                 
-                <div class="counter-box">
-                    LIV. ACIDITÀ FRIGINTINI: <span id="acid-level">8000</span>%
+                <div class="stats-container">
+                    <div class="acid-box">
+                        LIV. ACIDITÀ: <span id="acid-level">5000</span>%
+                    </div>
+                    <div class="donation-box">
+                        GAVISCON DONATI: <span id="donation-count">0</span>
+                    </div>
                 </div>
 
-                <a href="#" class="btn" id="donaBtn">PLACA L'IRA ORA</a>
+                <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA</button>
             </div>
 
-            <div class="reviews">
-                <div class="review-item">
-                    <strong>Peppe da Modica:</strong> "Mi stava per menare, poi ho donato. Ora sorride." ⭐⭐⭐⭐⭐
+            <div class="reviews-grid" id="reviews-grid">
                 </div>
-                <div class="review-item">
-                    <strong>Anonimo:</strong> "Il pugno fa male, il Gaviscon aiuta." ⭐⭐⭐⭐⭐
-                </div>
-            </div>
         </main>
     </div>
 
     <script>
+        /* --- CONFIGURAZIONE --- */
         const donaBtn = document.getElementById('donaBtn');
-        const acidLevelSpan = document.getElementById('acid-level');
-        const imageFile = 'gaviscon.png'; // Nome del tuo file
+        const acidEl = document.getElementById('acid-level');
+        const donationEl = document.getElementById('donation-count');
+        const reviewsGrid = document.getElementById('reviews-grid');
+        const imageFile = 'gaviscon.png'; 
 
-        // 1. Script per far salire il livello di acidità a caso
+        // Frasi da "Cooldown" (quando non puoi cliccare)
+        const cooldownTexts = [
+            "GRAZIE MBARE!",
+            "ASPETTA N'ATTIMU",
+            "A POSTU!",
+            "CALMA...",
+            "RESPIRA...",
+            "MINCHIA GRAZIE",
+            "OK CUMPÀ"
+        ];
+
+        // Frasi Bottone Attivo
+        const activeTexts = [
+            "DAI GAVISCON!",
+            "SALVATI IL NASO!",
+            "DONA ORA!",
+            "PLACA LA BESTIA"
+        ];
+
+        const reviewsData = [
+            { name: "Saro Occhipinti (Modica)", text: "Mi salvasti a vita. Stava partennu un gancio." },
+            { name: "Signora Iozzia (Frigintini)", text: "Finalmente mi passau l'acidu ca avia n'to stomacu!" },
+            { name: "Peppe Cannata (Scicli)", text: "Dona, dona, ca chista è pericolosa assai." },
+            { name: "Turi Buscema (Ispica)", text: "Minchia che botta d'acitu... menu mali ca c'è stu situ." },
+            { name: "C. Spadaro (Ragusa)", text: "Un Gaviscon al giorno toglie il pugno di torno." },
+            { name: "Salvo Ruta (Modica Bassa)", text: "A prima mi pareva na babbata, poi mi arrivau na cinquina." },
+            { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." },
+            { name: "Nonna Maria (Frigintini)", text: "Mangiava troppu pesante, ora è tranquilla." }
+        ];
+
+        // STATO DEL GIOCO
+        let acidLevel = 5000;
+        let donations = Math.floor(Math.random() * 40) + 138; // Parte da 138-178
+        let isCooldown = false; // Variabile per bloccare il click
+
+        donationEl.innerText = donations;
+
+        // --- GAME LOOP (Solo Acidità) ---
         setInterval(() => {
-            let currentLevel = parseInt(acidLevelSpan.innerText);
-            acidLevelSpan.innerText = currentLevel + Math.floor(Math.random() * 10);
-        }, 100);
+            // L'acidità sale piano
+            acidLevel += Math.floor(Math.random() * 20) + 5;
+            updateDisplay();
+        }, 200);
 
-        // 2. Script Pioggia
+        function updateDisplay() {
+            acidEl.innerText = acidLevel;
+            if(acidLevel > 8000) { acidEl.style.color = "red"; }
+            else if (acidLevel < 2000) { acidEl.style.color = "green"; }
+            else { acidEl.style.color = "#cc6600"; }
+        }
+
+        // --- LOGICA CLICK (COOLDOWN ATTIVO) ---
         donaBtn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Cambia testo bottone
-            donaBtn.innerText = "GRAZIE!!!";
-            donaBtn.style.backgroundColor = "#55ff55"; // Diventa verde
+            // SE SIAMO IN COOLDOWN, ESCI SUBITO (NON FARE NULLA)
+            if (isCooldown) return;
+
+            // 1. ATTIVA COOLDOWN
+            isCooldown = true;
+            donaBtn.disabled = true; // Disabilita visivamente il bottone
+
+            // 2. EFFETTO GIOCO
+            // Danno ridotto (500-800) così è più difficile
+            let damage = Math.floor(Math.random() * 300) + 500;
+            acidLevel -= damage;
+            if (acidLevel < 0) acidLevel = 0;
+
+            donations++;
+            donationEl.innerText = donations;
             
-            // Pioggia
-            const count = 40; 
-            for (let i = 0; i < count; i++) {
-                createFallingItem();
-            }
+            // Messaggio meme siciliano temporaneo
+            donaBtn.innerText = cooldownTexts[Math.floor(Math.random() * cooldownTexts.length)];
+            
+            spawnRain();
+            updateDisplay();
+
+            // 3. RIATTIVA DOPO 1.5 SECONDI
+            setTimeout(() => {
+                isCooldown = false;
+                donaBtn.disabled = false;
+                donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
+            }, 1500); // 1500 millisecondi = 1.5 secondi
         });
 
-        function createFallingItem() {
-            const img = document.createElement('img');
-            img.src = imageFile; 
-            img.classList.add('falling-item');
-            img.style.left = Math.random() * 95 + 'vw'; 
-            const duration = Math.random() * 2 + 1.5;
-            img.style.animationDuration = duration + 's';
-            const delay = Math.random() * 1;
-            img.style.animationDelay = delay + 's';
-            const size = Math.random() * 30 + 40; 
-            img.style.width = size + 'px';
-            document.body.appendChild(img);
-            setTimeout(() => { img.remove(); }, (duration + delay + 0.5) * 1000); 
+        // --- PIOGGIA OTTIMIZZATA ---
+        function spawnRain() {
+            const count = 5; // Meno oggetti per evitare crash
+            for (let i = 0; i < count; i++) {
+                const img = document.createElement('img');
+                img.src = imageFile;
+                img.classList.add('falling-item');
+                img.style.left = Math.random() * 90 + 'vw'; 
+                img.style.animationDuration = (Math.random() * 1 + 1) + 's';
+                img.style.width = (Math.random() * 20 + 40) + 'px';
+                document.body.appendChild(img);
+                
+                // Pulizia sicura
+                setTimeout(() => { img.remove(); }, 2000); 
+            }
         }
-    </script>
 
+        // --- RECENSIONI A GRIGLIA ---
+        // Inizializza 4 slot vuoti
+        function initReviews() {
+            reviewsGrid.innerHTML = '';
+            // Creiamo 4 carte fisse
+            for(let i=0; i<4; i++) {
+                let div = document.createElement('div');
+                div.className = 'review-card';
+                div.id = 'review-slot-' + i;
+                reviewsGrid.appendChild(div);
+            }
+            updateReviewsContent();
+        }
+
+        function updateReviewsContent() {
+            // Mischia e prendi 4 recensioni
+            const shuffled = [...reviewsData].sort(() => 0.5 - Math.random());
+            
+            for(let i=0; i<4; i++) {
+                const slot = document.getElementById('review-slot-' + i);
+                const rev = shuffled[i];
+                slot.innerHTML = `
+                    <div class="review-author">${rev.name}</div>
+                    <div class="review-text">"${rev.text}"</div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                `;
+            }
+        }
+
+        initReviews();
+        // Cambia recensioni ogni 5 secondi senza toccare il layout
+        setInterval(updateReviewsContent, 5000);
+
+    </script>
 </body>
 </html>
