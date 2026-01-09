@@ -11,23 +11,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
-            overscroll-behavior: none; /* Blocca il "tira giù per aggiornare" */
-            width: 100%;
-            height: 100%;
+            overscroll-behavior: none; /* Blocca aggiornamenti involontari */
+            width: 100%; height: 100%;
         }
 
         body {
             background-color: #e0e0e0;
             font-family: 'Press Start 2P', cursive;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding-top: 50px; 
-            color: #000;
-            overflow-y: scroll; 
-            overflow-x: hidden;
-            position: relative;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding-top: 50px; 
+            color: #000; overflow-y: scroll; overflow-x: hidden; position: relative;
         }
 
         /* --- BARRA NEWS --- */
@@ -49,8 +42,7 @@
         /* --- LAYOUT --- */
         .content-wrapper {
             position: relative; z-index: 10; display: flex; flex-direction: column;
-            align-items: center; width: 100%; padding: 10px;
-            padding-bottom: 50px;
+            align-items: center; width: 100%; padding: 10px; padding-bottom: 50px;
         }
 
         header {
@@ -59,7 +51,7 @@
         }
         h1 { font-size: 0.8rem; line-height: 1.5; text-transform: uppercase; color: #cc0000; }
         
-        /* --- CARD --- */
+        /* --- CARD PRINCIPALE --- */
         .card {
             background-color: #fff; border: 5px solid #ff0000; padding: 15px; width: 100%; max-width: 500px;
             text-align: center; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); margin-bottom: 20px;
@@ -79,7 +71,6 @@
             width: 100%; border: 3px solid #000; background: #eee; padding: 10px;
             font-size: 0.6rem; margin-top: 5px; display: flex; flex-direction: column; gap: 5px;
         }
-
         .acid-box { color: red; font-weight: bold;}
         .donation-box { color: blue; }
 
@@ -88,54 +79,40 @@
             background-color: #ffcccc; border: 4px solid #000; color: #000; padding: 15px 10px; width: 100%;
             font-family: 'Press Start 2P', cursive; font-size: 0.8rem; cursor: pointer;
             box-shadow: 4px 4px 0px #000; display: inline-block; user-select: none; margin-top: 10px;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-            transition: all 0.1s;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: all 0.1s;
         }
-        /* Stato disabilitato (Cooldown) */
         .btn:disabled {
             background-color: #999; color: #fff; border-color: #555;
             transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; cursor: not-allowed;
         }
-        
         .btn:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; background-color: #55ff55; }
 
-        /* --- GRIGLIA RECENSIONI (Nuovo Layout) --- */
-        .reviews-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Due colonne */
-            gap: 10px;
-            width: 100%; max-width: 500px;
-            margin-top: 20px;
+        /* --- LISTA RECENSIONI (Singola Colonna) --- */
+        .reviews-list {
+            display: flex; flex-direction: column; gap: 15px; /* Spazio verticale tra i commenti */
+            width: 100%; max-width: 500px; margin-top: 10px;
         }
 
         .review-card {
-            background: #fff; border: 2px solid #000; padding: 8px;
-            font-size: 0.5rem; text-align: left;
-            box-shadow: 3px 3px 0px #ccc;
+            background: #fff; border: 2px solid #000; padding: 10px;
+            font-size: 0.6rem; text-align: left;
+            box-shadow: 4px 4px 0px #ccc;
             display: flex; flex-direction: column; justify-content: space-between;
-            height: 100px; /* Altezza fissa per allineamento */
-            overflow: hidden;
+            min-height: 90px;
         }
 
-        .review-author { font-weight: bold; margin-bottom: 5px; color: #d32f2f; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
-        .review-text { line-height: 1.3; flex-grow: 1; }
-        .stars { color: gold; text-shadow: 1px 1px 0 #000; margin-top: 5px; text-align: right;}
+        .review-author { font-weight: bold; margin-bottom: 5px; color: #d32f2f; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        .review-text { line-height: 1.4; flex-grow: 1; margin-bottom: 5px; }
+        .stars { color: gold; text-shadow: 1px 1px 0 #000; text-align: right; font-size: 0.7rem; }
 
         /* --- PIOGGIA --- */
         .falling-item {
             position: fixed; top: -100px; z-index: 100; pointer-events: none;
             width: 50px; height: auto; will-change: transform; animation: fall linear forwards; 
         }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .reviews-grid { grid-template-columns: 1fr; } /* Una colonna su mobile */
-            .review-card { height: auto; min-height: 80px; }
-            h1 { font-size: 0.7rem; }
-        }
+        @media (max-width: 480px) { h1 { font-size: 0.7rem; } }
     </style>
 </head>
 <body>
@@ -172,7 +149,7 @@
                 <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA</button>
             </div>
 
-            <div class="reviews-grid" id="reviews-grid">
+            <div class="reviews-list" id="reviews-list">
                 </div>
         </main>
     </div>
@@ -182,49 +159,43 @@
         const donaBtn = document.getElementById('donaBtn');
         const acidEl = document.getElementById('acid-level');
         const donationEl = document.getElementById('donation-count');
-        const reviewsGrid = document.getElementById('reviews-grid');
+        const reviewsList = document.getElementById('reviews-list');
         const imageFile = 'gaviscon.png'; 
 
-        // Frasi da "Cooldown" (quando non puoi cliccare)
+        // Frasi Cooldown
         const cooldownTexts = [
-            "GRAZIE MBARE!",
-            "ASPETTA N'ATTIMU",
-            "A POSTU!",
-            "CALMA...",
-            "RESPIRA...",
-            "MINCHIA GRAZIE",
-            "OK CUMPÀ"
+            "GRAZIE MBARE!", "ASPETTA N'ATTIMU", "A POSTU!", 
+            "CALMA...", "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"
         ];
 
-        // Frasi Bottone Attivo
+        // Frasi Attive
         const activeTexts = [
-            "DAI GAVISCON!",
-            "SALVATI IL NASO!",
-            "DONA ORA!",
-            "PLACA LA BESTIA"
+            "DAI GAVISCON!", "SALVATI IL NASO!", "DONA ORA!", "PLACA LA BESTIA"
         ];
 
+        // --- DATABASE RECENSIONI AGGIORNATO ---
         const reviewsData = [
+            { name: "Kevin", text: "Stava partendo il destro, ma col Gaviscon si è calmata subito. Incredibile." },
+            { name: "Blandiv", text: "Ho donato 5 scatole. Ora forse arrivo a domani col naso intero." },
+            { name: "Sara Alfieri", text: "Raga funziona! L'acidità è scesa e lei ha smesso di urlare." },
+            { name: "Giulia Senpai House", text: "Ma che è sta cafonata? Però utile, 5 stelle pì l'impegno." },
             { name: "Saro Occhipinti (Modica)", text: "Mi salvasti a vita. Stava partennu un gancio." },
             { name: "Signora Iozzia (Frigintini)", text: "Finalmente mi passau l'acidu ca avia n'to stomacu!" },
             { name: "Peppe Cannata (Scicli)", text: "Dona, dona, ca chista è pericolosa assai." },
             { name: "Turi Buscema (Ispica)", text: "Minchia che botta d'acitu... menu mali ca c'è stu situ." },
-            { name: "C. Spadaro (Ragusa)", text: "Un Gaviscon al giorno toglie il pugno di torno." },
             { name: "Salvo Ruta (Modica Bassa)", text: "A prima mi pareva na babbata, poi mi arrivau na cinquina." },
-            { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." },
-            { name: "Nonna Maria (Frigintini)", text: "Mangiava troppu pesante, ora è tranquilla." }
+            { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." }
         ];
 
         // STATO DEL GIOCO
         let acidLevel = 5000;
-        let donations = Math.floor(Math.random() * 40) + 138; // Parte da 138-178
-        let isCooldown = false; // Variabile per bloccare il click
+        let donations = Math.floor(Math.random() * 40) + 138;
+        let isCooldown = false;
 
         donationEl.innerText = donations;
 
-        // --- GAME LOOP (Solo Acidità) ---
+        // --- GAME LOOP ---
         setInterval(() => {
-            // L'acidità sale piano
             acidLevel += Math.floor(Math.random() * 20) + 5;
             updateDisplay();
         }, 200);
@@ -236,19 +207,15 @@
             else { acidEl.style.color = "#cc6600"; }
         }
 
-        // --- LOGICA CLICK (COOLDOWN ATTIVO) ---
+        // --- CLICK ---
         donaBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // SE SIAMO IN COOLDOWN, ESCI SUBITO (NON FARE NULLA)
             if (isCooldown) return;
 
-            // 1. ATTIVA COOLDOWN
             isCooldown = true;
-            donaBtn.disabled = true; // Disabilita visivamente il bottone
+            donaBtn.disabled = true;
 
-            // 2. EFFETTO GIOCO
-            // Danno ridotto (500-800) così è più difficile
+            // Danno ridotto
             let damage = Math.floor(Math.random() * 300) + 500;
             acidLevel -= damage;
             if (acidLevel < 0) acidLevel = 0;
@@ -256,23 +223,21 @@
             donations++;
             donationEl.innerText = donations;
             
-            // Messaggio meme siciliano temporaneo
             donaBtn.innerText = cooldownTexts[Math.floor(Math.random() * cooldownTexts.length)];
             
             spawnRain();
             updateDisplay();
 
-            // 3. RIATTIVA DOPO 1.5 SECONDI
             setTimeout(() => {
                 isCooldown = false;
                 donaBtn.disabled = false;
                 donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
-            }, 1500); // 1500 millisecondi = 1.5 secondi
+            }, 1500);
         });
 
-        // --- PIOGGIA OTTIMIZZATA ---
+        // --- PIOGGIA (Aumentata un po') ---
         function spawnRain() {
-            const count = 5; // Meno oggetti per evitare crash
+            const count = 8; // Aumentato da 5 a 8 per più caos
             for (let i = 0; i < count; i++) {
                 const img = document.createElement('img');
                 img.src = imageFile;
@@ -281,31 +246,27 @@
                 img.style.animationDuration = (Math.random() * 1 + 1) + 's';
                 img.style.width = (Math.random() * 20 + 40) + 'px';
                 document.body.appendChild(img);
-                
-                // Pulizia sicura
                 setTimeout(() => { img.remove(); }, 2000); 
             }
         }
 
-        // --- RECENSIONI A GRIGLIA ---
-        // Inizializza 4 slot vuoti
+        // --- RECENSIONI (3 a colonna) ---
         function initReviews() {
-            reviewsGrid.innerHTML = '';
-            // Creiamo 4 carte fisse
-            for(let i=0; i<4; i++) {
+            reviewsList.innerHTML = '';
+            // Creiamo 3 slot fissi
+            for(let i=0; i<3; i++) {
                 let div = document.createElement('div');
                 div.className = 'review-card';
                 div.id = 'review-slot-' + i;
-                reviewsGrid.appendChild(div);
+                reviewsList.appendChild(div);
             }
             updateReviewsContent();
         }
 
         function updateReviewsContent() {
-            // Mischia e prendi 4 recensioni
             const shuffled = [...reviewsData].sort(() => 0.5 - Math.random());
             
-            for(let i=0; i<4; i++) {
+            for(let i=0; i<3; i++) {
                 const slot = document.getElementById('review-slot-' + i);
                 const rev = shuffled[i];
                 slot.innerHTML = `
@@ -317,7 +278,6 @@
         }
 
         initReviews();
-        // Cambia recensioni ogni 5 secondi senza toccare il layout
         setInterval(updateReviewsContent, 5000);
 
     </script>
