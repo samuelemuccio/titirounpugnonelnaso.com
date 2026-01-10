@@ -15,6 +15,8 @@
             --deep-blue: #220044; 
             --raw-white: #ffffff;
             --alert-red: #ff2200;
+            --safe-green: #00e676;
+            --tech-grey: #888888;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,387 +30,463 @@
             background-color: var(--deep-blue);
             background-image: 
                 linear-gradient(45deg, var(--brutal-black) 25%, transparent 25%), 
-                linear-gradient(-45deg, var(--brutal-black) 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, var(--brutal-black) 75%), 
-                linear-gradient(-45deg, transparent 75%, var(--brutal-black) 75%);
+                linear-gradient(-45deg, var(--brutal-black) 25%, transparent 25%);
             background-size: 20px 20px;
-            
             font-family: 'Press Start 2P', cursive;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh; padding-top: 50px; color: var(--raw-white);
             overflow: hidden; position: relative;
+            transition: background-color 0.2s ease;
         }
 
-        /* --- NEWS BAR --- */
+        /* --- FASI VISIVE --- */
+        body.phase-angry { background-color: #5e005e; }
+        
+        body.phase-fury { animation: red-pulse 0.3s infinite alternate; }
+        body.phase-fury .content-wrapper { animation: constant-shake 0.1s infinite; }
+
+        @keyframes red-pulse { from { background-color: #330000; } to { background-color: #aa0000; } }
+        
+        @keyframes constant-shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, 2px); }
+            50% { transform: translate(2px, -2px); }
+            75% { transform: translate(-2px, -2px); }
+            100% { transform: translate(2px, 2px); }
+        }
+
+        /* SFOCATURA */
+        .blur-target {
+            transition: filter 0.1s;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        body.blur-mode .blur-target {
+            filter: blur(15px); pointer-events: none; 
+        }
+
+        /* --- FUMETTO MEME (Stile Dialogo) --- */
+        .comic-bubble {
+            position: fixed; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) scale(0);
+            background: #fff; border: 4px solid #000;
+            padding: 25px; width: 85%; max-width: 350px;
+            text-align: center; color: #000; 
+            font-size: 0.9rem; line-height: 1.6; /* Testo più grande e leggibile */
+            font-weight: bold;
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.5);
+            z-index: 99999; 
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0; pointer-events: none;
+        }
+        .comic-bubble.visible { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+        .comic-bubble::after {
+            content: ''; position: absolute; bottom: -20px; right: 40px;
+            border-width: 20px 20px 0; border-style: solid; border-color: #000 transparent; width: 0;
+        }
+
+        /* --- UI ELEMENTS --- */
         .breaking-news {
             position: fixed; top: 0; left: 0; width: 100%;
-            background: var(--acid-yellow);
-            color: var(--brutal-black);
+            background: var(--acid-yellow); color: var(--brutal-black);
             border-bottom: 4px solid var(--brutal-black);
             padding: 10px 0; z-index: 200; white-space: nowrap; overflow: hidden;
         }
         .breaking-news p {
-            display: inline-block; font-size: 0.7rem; font-weight: bold;
-            text-transform: uppercase;
-            animation: scroll-text 10s linear infinite;
+            display: inline-block; font-size: 0.6rem; font-weight: bold;
+            animation: scroll-text 15s linear infinite;
         }
-        @keyframes scroll-text {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
+        @keyframes scroll-text { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* --- LAYOUT --- */
         .content-wrapper {
-            position: relative; z-index: 10; 
-            display: flex; flex-direction: column; align-items: center; 
-            width: 100%; max-width: 550px;
-            padding: 15px; height: 100%; overflow-y: auto;
+            position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; 
+            width: 100%; max-width: 500px; padding: 10px 20px 80px 20px; 
+            height: 100%; overflow-y: auto; overflow-x: hidden;
         }
 
         header {
-            margin-bottom: 25px; text-align: center;
-            background: var(--raw-white);
-            border: 4px solid var(--brutal-black);
-            box-shadow: 6px 6px 0px var(--acid-yellow);
-            padding: 15px;
+            margin-bottom: 20px; text-align: center; width: 100%;
+            background: var(--raw-white); border: 4px solid var(--brutal-black);
+            box-shadow: 6px 6px 0px var(--acid-yellow); padding: 15px;
             transform: rotate(-1deg); color: var(--brutal-black);
         }
-        h1 { 
-            font-size: 1rem; line-height: 1.5; 
-            text-transform: uppercase;
-        }
+        h1 { font-size: 0.9rem; line-height: 1.5; text-transform: uppercase; }
         
-        /* --- CARD --- */
         .card {
             background-color: var(--raw-white); color: var(--brutal-black);
-            border-radius: 0px; border: 5px solid var(--brutal-black);
-            box-shadow: 8px 8px 0px var(--brutal-black);
-            padding: 25px; width: 100%;
-            text-align: center; margin-bottom: 25px;
+            border: 4px solid var(--brutal-black); box-shadow: 8px 8px 0px var(--brutal-black);
+            padding: 20px; width: 100%; text-align: center; margin-bottom: 20px;
         }
         
-        .card-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        
-        p { font-size: 0.8rem; line-height: 1.6; font-weight: bold;}
-        
-        .highlight { 
-            background: var(--shock-pink); color: var(--raw-white);
-            padding: 5px 10px; border: 3px solid var(--brutal-black);
-            display: inline-block; transform: skew(-5deg);
-            text-shadow: 2px 2px 0px var(--brutal-black);
+        #phase-badge {
+            background: var(--brutal-black); color: white; padding: 8px;
+            font-size: 0.6rem; text-transform: uppercase; margin-bottom: 15px;
+            border: 2px solid white; display: inline-block; width: 100%;
         }
 
         .product-img {
-            max-width: 180px; width: 100%; height: auto; 
-            border: 4px solid var(--brutal-black);
-            box-shadow: 5px 5px 0px var(--acid-yellow);
-            background: var(--raw-white); padding: 10px;
-            transform: rotate(2deg); transition: transform 0.1s;
+            max-width: 160px; width: 100%; height: auto; margin: 15px 0;
+            border: 4px solid var(--brutal-black); box-shadow: 5px 5px 0px var(--acid-yellow);
+            background: var(--raw-white); padding: 10px; transform: rotate(2deg);
+            transition: transform 0.2s;
         }
-        .product-img:active { transform: scale(0.95) rotate(0deg); }
-        
-        /* --- PROGRESS BAR (CORRETTA VISIBILITÀ) --- */
+
         .progress-container {
-            width: 100%; 
-            background: var(--brutal-black); /* Sfondo nero */
-            height: 35px;
-            border: 4px solid var(--brutal-black);
-            margin-top: 10px; position: relative;
+            width: 100%; background: var(--brutal-black); height: 35px;
+            border: 4px solid var(--brutal-black); margin-top: 5px; position: relative;
         }
         .progress-bar {
             height: 100%; width: 50%;
-            background: linear-gradient(to right, var(--acid-yellow) 0%, var(--acid-yellow) 50%, var(--alert-red) 51%, var(--alert-red) 100%);
-            background-size: 200% 100%; background-position: 0% 0%;
-            transition: width 0.2s linear, background-position 0.3s ease;
+            background: linear-gradient(to right, var(--safe-green), var(--acid-yellow), var(--alert-red));
+            transition: width 0.1s linear;
         }
-        /* FIX: Testo bianco su sfondo nero/giallo per massima leggibilità */
         .progress-text {
-            position: absolute; width: 100%; top: 0; left: 0;
-            line-height: 27px; font-size: 0.7rem; 
-            color: var(--raw-white); /* BIANCO */
-            font-weight: bold; pointer-events: none;
-            text-shadow: 2px 2px 0 #000; /* Ombra nera per leggere anche sul giallo */
-            z-index: 5;
+            position: absolute; width: 100%; top: 0; left: 0; line-height: 27px; 
+            font-size: 0.65rem; color: var(--raw-white); font-weight: bold; 
+            text-shadow: 2px 2px 0 #000; z-index: 5; pointer-events: none;
         }
 
-        /* --- BOTTONE --- */
         .btn {
-            background-color: var(--acid-yellow);
-            color: var(--brutal-black);
-            border: 4px solid var(--brutal-black);
-            padding: 25px 15px; width: 100%;
-            font-family: 'Press Start 2P', cursive; font-size: 1rem; text-transform: uppercase;
-            cursor: pointer; border-radius: 0px;
-            box-shadow: 8px 8px 0px var(--brutal-black);
-            margin-top: 15px; transition: all 0.05s;
-            touch-action: manipulation; position: relative; top: 0; left: 0;
+            background-color: var(--acid-yellow); color: var(--brutal-black);
+            border: 4px solid var(--brutal-black); padding: 20px; width: 100%;
+            font-family: 'Press Start 2P', cursive; font-size: 0.9rem; cursor: pointer;
+            box-shadow: 6px 6px 0px var(--brutal-black); margin-top: 15px;
+            position: relative; top: 0; left: 0; user-select: none;
+            transition: background 0.1s, top 0.1s;
         }
-        
-        .btn:active:not(:disabled) { 
-            top: 8px; left: 8px; box-shadow: 0px 0px 0px var(--brutal-black); 
-            background-color: var(--shock-pink); color: var(--raw-white);
-        }
-        
-        .btn:disabled {
-            background-color: #555; color: #999; border-color: #333;
-            box-shadow: 4px 4px 0px #222; top: 4px; left: 4px; cursor: not-allowed;
+        .btn:active:not(:disabled) { top: 6px; left: 6px; box-shadow: 0px 0px 0px; background-color: var(--shock-pink); color: white;}
+        /* STILE COOLDOWN */
+        .btn:disabled { 
+            background-color: #333; color: #777; top: 4px; left: 4px; 
+            box-shadow: none; cursor: wait; border-color: #555;
         }
 
-        /* --- SCRITTE VOLANTI --- */
+        .btn-blur {
+            background-color: var(--tech-grey); color: var(--raw-white);
+            border: 2px solid var(--brutal-black); padding: 15px; width: 100%;
+            font-family: 'Press Start 2P', cursive; font-size: 0.6rem; 
+            box-shadow: 4px 4px 0px var(--brutal-black); margin-top: 30px;
+            position: relative; top: 0; left: 0;
+        }
+        .btn-blur:active:not(:disabled) { top: 4px; left: 4px; box-shadow: 0px 0px 0px; }
+        .btn-blur:disabled { opacity: 0.5; cursor: wait; }
+
         .floating-text {
-            position: absolute; font-weight: bold; font-size: 1rem;
-            pointer-events: none; animation: popUpBrutal 0.7s ease-out forwards;
-            z-index: 200; width: auto; white-space: nowrap; text-align: center;
-            color: var(--acid-yellow);
-            text-shadow: 3px 3px 0px var(--brutal-black);
-            border: 3px solid var(--brutal-black); background: var(--deep-blue);
-            padding: 5px 10px; transform: rotate(-5deg);
+            position: absolute; font-weight: bold; font-size: 1rem; pointer-events: none; 
+            animation: popUpBrutal 0.8s ease-out forwards; z-index: 200; 
+            text-shadow: 2px 2px 0px #000; padding: 5px;
         }
         @keyframes popUpBrutal {
-            0% { transform: translateY(0) scale(0.5) rotate(-5deg); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-150px) scale(1.2) rotate(10deg); opacity: 0; }
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; transform: translateY(-30px) scale(1.2); }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
         }
 
-        /* --- GRIGLIA RECENSIONI --- */
-        .reviews-grid {
-            display: grid; grid-template-columns: 1fr; gap: 20px;
-            width: 100%; margin-top: 10px; color: var(--brutal-black);
-        }
-
+        .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 15px; width: 100%; margin-top: 10px; }
         .review-card {
-            background: var(--raw-white); border: 4px solid var(--brutal-black);
-            padding: 15px; font-size: 0.65rem; text-align: left;
-            border-radius: 0px;
-            box-shadow: 6px 6px 0px var(--acid-yellow);
-            transform: rotate(1deg);
+            background: var(--raw-white); border: 4px solid var(--brutal-black); padding: 12px;
+            font-size: 0.6rem; text-align: left; box-shadow: 5px 5px 0px var(--acid-yellow); color: var(--brutal-black);
         }
         .review-card:nth-child(even) { transform: rotate(-1deg); box-shadow: 6px 6px 0px var(--shock-pink);}
+        .review-author { font-weight: bold; margin-bottom: 5px; background: var(--acid-yellow); display: inline-block; padding: 2px 5px;}
+        .stars { color: var(--shock-pink); margin-top: 5px; text-align: right;}
 
-        .review-author { 
-            font-weight: bold; margin-bottom: 8px; 
-            background: var(--acid-yellow); color: var(--brutal-black);
-            display: inline-block; padding: 3px 6px; border: 2px solid var(--brutal-black);
-        }
-        .review-text { line-height: 1.4; }
-        .stars { color: var(--shock-pink); margin-top: 8px; text-align: right; text-shadow: 2px 2px 0px var(--brutal-black);}
-
-        /* --- GAME OVER OVERLAY --- */
-        .game-over-screen {
+        /* OVERLAYS */
+        .overlay-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--brutal-black);
-            z-index: 9999; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--alert-red); text-align: center; padding: 20px;
-            border: 10px solid var(--alert-red);
+            background: var(--brutal-black); z-index: 99999; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; padding: 20px;
         }
-        #gifContainer {
-            margin: 20px 0; width: 100%; max-width: 400px; display: flex; justify-content: center;
-        }
-       #gifContainer video {
-            max-width: 100%; 
-            height: auto; 
-            border: 5px solid var(--alert-red);
-            box-shadow: 0 0 20px var(--alert-red);
-            display: block; /* Aiuta il layout */
-        }
+        .game-over-mode { border: 10px solid var(--alert-red); }
+        .game-over-mode .status-text { color: var(--alert-red); animation: glitch 0.2s infinite; }
+        
+        .victory-mode { border: 10px solid var(--safe-green); background: #002200; }
+        .victory-mode .status-text { color: var(--safe-green); font-size: 1.5rem; line-height: 1.5; }
 
-        .game-over-text { 
-            font-size: 2.5rem; text-transform: uppercase;
-            text-shadow: 4px 4px 0px #fff; animation: glitch 0.2s infinite;
+        #gifContainer video {
+            max-width: 100%; height: auto; border: 5px solid var(--alert-red);
+            box-shadow: 0 0 20px var(--alert-red); display: block; 
         }
-        @keyframes glitch {
-            0% { transform: translate(2px, 0) skew(0deg); }
-            20% { transform: translate(-2px, 0) skew(2deg); }
-            40% { transform: translate(0, 2px) skew(0deg); }
-            60% { transform: translate(0, -2px) skew(-2deg); }
-            80% { transform: translate(2px, 0) skew(0deg); }
-            100% { transform: translate(0, 0) skew(0deg); }
-        }
-
+        .status-text { font-size: 2rem; text-transform: uppercase; margin-bottom: 20px; text-shadow: 4px 4px 0 #fff;}
+        
         .retry-btn {
-            background: var(--alert-red); color: white; border: 4px solid white;
-            padding: 20px 40px; font-family: inherit; font-size: 1.2rem; cursor: pointer;
-            box-shadow: 8px 8px 0px white; position: relative; top:0; left:0;
-            margin-top: 20px;
+            background: var(--raw-white); color: var(--brutal-black); border: 4px solid var(--brutal-black);
+            padding: 15px 30px; font-family: inherit; font-size: 1rem; cursor: pointer;
+            box-shadow: 6px 6px 0px var(--tech-grey); margin-top: 20px;
         }
-        .retry-btn:active { top: 6px; left: 6px; box-shadow: 2px 2px 0px white; }
+        .retry-btn:active { top: 4px; left: 4px; box-shadow: 0 0 0; }
 
-        /* --- PIOGGIA --- */
         .falling-item {
-            position: fixed; top: -100px; z-index: 100; pointer-events: none;
-            width: 60px; height: auto; animation: fall linear forwards; 
-            filter: drop-shadow(4px 4px 0px var(--brutal-black));
+            position: fixed; top: -100px; z-index: 100; pointer-events: none; width: 50px;
+            animation: fall linear forwards; filter: drop-shadow(4px 4px 0px black);
         }
         @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
-
+        @keyframes glitch {
+            0% { transform: translate(2px, 0); } 20% { transform: translate(-2px, 0); }
+            40% { transform: translate(0, 2px); } 60% { transform: translate(0, -2px); }
+            80% { transform: translate(2px, 0); } 100% { transform: translate(0, 0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="breaking-news">
-        <p>⚠️ ALLARME LIVELLO ACIDITÀ TOSSICO // RISCHIO PUGNO IMMINENTE // SALVA FRIGINTINI // DONA ORA ORA ORA ⚠️</p>
+    <div id="meme-popup" class="comic-bubble">
+        "MA PERCHÉ?<br>A CHE SERVE UN TASTO PER SFOCARE??"
     </div>
 
-    <div class="game-over-screen" id="gameOverScreen">
-        <div class="game-over-text">FATAL ERROR<br>GAME OVER</div>
-        
-        <div id="gifContainer"></div>
+    <div class="blur-target">
+        <div class="breaking-news">
+            <p>⚠️ ALLARME: LIVELLI ACIDITÀ INSTABILI // SALVA FRIGINTINI // DONA ORA ORA ORA ⚠️</p>
+        </div>
 
-        <p style="color:var(--raw-white); margin-top:20px; font-size:1rem;">IL NASO È ANDATO.<br>ARRUPIGGHITI.</p>
+        <div class="content-wrapper">
+            <header>
+                <h1>SOS FRUSTRATI<br>A FRIGINTINI</h1>
+            </header>
+
+            <main class="card">
+                <div class="card-content">
+                    <div id="phase-badge">STATO: NERVOSA</div>
+                    
+                    <p>
+                        ATTENZIONE!<br>
+                        SI STA AGITANDO.<br><br>
+                        <span style="background:var(--shock-pink); color:white; padding:2px;">ABBASSA L'ACIDITÀ</span>
+                    </p>
+
+                    <img src="gaviscon.png" alt="Gaviscon" class="product-img" id="product-img">
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="acid-bar" style="width: 50%;"></div>
+                        <div class="progress-text">ACIDITÀ: <span id="acid-level">5000</span> / 10000</div>
+                    </div>
+                    
+                    <div style="font-size: 0.6rem; color: var(--brutal-black); margin-top:10px; font-weight:bold; background:var(--acid-yellow); padding:5px; border:3px solid black;">
+                        SCORE GAVISCON: <span id="donation-count">0</span>
+                    </div>
+
+                    <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA!</button>
+                </div>
+
+                <div class="reviews-grid" id="reviews-grid"></div>
+                <button type="button" class="btn-blur" id="blurBtn">TASTO PER SFOCARE</button>
+            </main>
+        </div>
+    </div>
+
+    <div class="overlay-screen" id="endScreen">
+        <div class="status-text" id="endTitle">FATAL ERROR</div>
+        <div id="gifContainer"></div>
+        <div id="winMessage" style="display:none; font-size:4rem;">🏆</div>
+        <p id="endSubtitle" style="color:var(--raw-white); margin-top:20px; font-size:0.8rem; line-height:1.5;">IL NASO È ANDATO.</p>
         <button class="retry-btn" onclick="resetGame()">RESET SYSTEM</button>
     </div>
 
-    <div class="content-wrapper">
-        <header>
-            <h1>SOS<br>FRUSTRATI</h1>
-        </header>
-
-        <main class="card">
-            <div class="card-content">
-                <p>
-                    ATTENZIONE!<br>
-                    LIVELLI CRITICI DI ACIDITÀ A FRIGINTINI<br><br>
-                    <span class="highlight">ABBASSA L'ACIDITÀ</span><br>
-                    PRIMA DELL'IMPATTO.
-                </p>
-
-                <img src="gaviscon.png" alt="Gaviscon" class="product-img" id="product-img">
-                
-                <div class="progress-container">
-                    <div class="progress-bar" id="acid-bar" style="width: 50%;"></div>
-                    <div class="progress-text">ACIDITÀ: <span id="acid-level">5000</span> / 10000</div>
-                </div>
-                
-                <div style="font-size: 0.7rem; color: var(--brutal-black); margin-top:10px; font-weight:bold; background:var(--acid-yellow); padding:5px; border:3px solid black;">
-                    SCORE GAVISCON: <span id="donation-count">0</span>
-                </div>
-
-                <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA!</button>
-            </div>
-
-            <div class="reviews-grid" id="reviews-grid"></div>
-        </main>
-    </div>
-
     <script>
-        /* --- SETUP --- */
+        /* --- AUDIO SYSTEM --- */
+        const clickSounds = ['click1.mp3', 'click2.mp3', 'click3.mp3'];
+        const gameOverSound = new Audio('crack.mp3');
+        const winSound = new Audio('win.mp3');
+
+        function stopAllAudio() {
+            gameOverSound.pause(); gameOverSound.currentTime = 0;
+            winSound.pause(); winSound.currentTime = 0;
+        }
+
+        function playRandomClick() {
+            const randomSrc = clickSounds[Math.floor(Math.random() * clickSounds.length)];
+            const audio = new Audio(randomSrc);
+            audio.volume = 0.5; 
+            audio.play().catch(e => {});
+        }
+
+        /* --- VAR --- */
         const donaBtn = document.getElementById('donaBtn');
+        const blurBtn = document.getElementById('blurBtn');
+        const memePopup = document.getElementById('meme-popup');
         const acidEl = document.getElementById('acid-level');
         const acidBar = document.getElementById('acid-bar');
         const donationEl = document.getElementById('donation-count');
         const reviewsGrid = document.getElementById('reviews-grid');
-        const gameOverScreen = document.getElementById('gameOverScreen');
+        const endScreen = document.getElementById('endScreen');
+        const endTitle = document.getElementById('endTitle');
+        const endSubtitle = document.getElementById('endSubtitle');
         const gifContainer = document.getElementById('gifContainer');
+        const winMessage = document.getElementById('winMessage');
+        const phaseBadge = document.getElementById('phase-badge');
         const imageFile = 'gaviscon.png'; 
 
-        const hitWords = [
-            "SUCA!", "MINCHIA!", "ARRUPIGGHITI!", "CHI TI MANGIASTI?!", "TIÈ!", "BESTIA!", "AIA!"
-        ];
-
-        const cooldownTexts = [
-            "GRAZIE MBARE!", "ASPETTA...", "A POSTU!", "CALMA...", 
-            "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"
-        ];
+        const hitWords = ["SUCA!", "MINCHIA!", "ARRUPIGGHITI!", "CHI TI MANGIASTI?!", "TIÈ!", "AIA!"];
+        const cooldownTexts = ["CARICO...", "ASPETTA...", "CALMA...", "FERMO!", "STOP!"];
         const activeTexts = ["PLACA L'IRA!", "SALVA IL NASO!", "DONA ORA!", "SPINGI!", "ANCORA!"];
 
         const reviewsData = [
+            { name: "Beatrice Emiliana", text: "MA CHE SCHIFO DI SITO È? APPENA BECCO LO SVILUPPATORE GLI TIRO UN PUGNO IN FACCIA! ACIDITÀ A MILLE!", stars: "★☆☆☆☆" },
             { name: "Giulia Senpai House", text: "Ma che è sta cafonata muccio? Però utile, 5 stelle pì l'impegno." },
-            { name: "Sara Alfieri (Scicli)", text: "Gioia mia, ma chi è stu burdellu? Cmq funziona, l'acidu mi passau." },
             { name: "Kevin", text: "Fratellì, mi hai salvato la vita. Stavo per prendere un destro allucinante." },
-            { name: "Blandiv", text: "Genio assoluto. Ora posso droppare nuove canzoni ndi istagram." },
-            { name: "Saro Occhipinti (Modica)", text: "Mi salvasti a vita. Stava partennu un gancio." },
-            { name: "Maria Concetta (Ispica)", text: "Bedda matri, pareva l'Esorcista! Cci vuliva l'acqua santa e Gaviscon." },
-            { name: "Peppe Cannata (Scicli)", text: "Dona, dona, ca chista è pericolosa assai." },
-            { name: "Turi Buscema (Ispica)", text: "Minchia che botta d'acitu... menu mali ca c'è stu situ." },
-            { name: "Salvo Ruta (Modica Bassa)", text: "A prima mi pareva na babbata, poi mi arrivau na cinquina." },
-            { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." },
-            { name: "L'Americano (Turista)", text: "I don't understand dialects but I donated Gaviscon and I am alive." } 
+            { name: "Saro Occhipinti", text: "Mi salvasti a vita. Stava partennu un gancio." },
+            { name: "Peppe Cannata", text: "Dona, dona, ca chista è pericolosa assai." },
+            { name: "L'Americano", text: "I don't understand dialects but I donated Gaviscon and I am alive." }
         ];
 
-        let acidLevel = 5000;
+        let acidLevel = 2000; 
         let maxAcid = 10000;
-        let donations = Math.floor(Math.random() * 70) + 138; 
+        let donations = 138; 
         let isCooldown = false; 
         let isGameOver = false;
         let gameInterval = null;
 
-        donationEl.innerText = donations;
-
-        // --- FUNZIONE PER AVVIARE/RIAVVIARE IL GIOCO ---
+        // --- GAME LOOP BILANCIATO (10 tick al secondo) ---
         function startGame() {
             if (gameInterval) clearInterval(gameInterval);
             
             gameInterval = setInterval(() => {
                 if(isGameOver) return;
 
-                acidLevel += Math.floor(Math.random() * 50) + 40;
+                document.body.classList.remove('phase-angry', 'phase-fury');
+
+                let increaseAmount = 0; 
+
+                // --- NEMICO MENO POTENTE VERSO LA FINE (Per rendere possibile la vittoria) ---
+                
+                if (acidLevel > 8000) {
+                    increaseAmount = 130; // Furia (Velocissimo ma onesto)
+                    document.body.classList.add('phase-fury'); 
+                    phaseBadge.innerText = "STATO: FURIA SICULA";
+                    phaseBadge.style.background = "red";
+                } 
+                else if (acidLevel > 5000) {
+                    increaseAmount = 70; // Medio
+                    document.body.classList.add('phase-angry'); 
+                    phaseBadge.innerText = "STATO: NCAZZATA NIURA";
+                    phaseBadge.style.background = "purple";
+                }
+                else if (acidLevel > 2000) {
+                    increaseAmount = 25; // Safe Zone (Lento)
+                    phaseBadge.innerText = "STATO: NCAZZATEDDA";
+                    phaseBadge.style.background = "black";
+                }
+                else {
+                    // *** IL FIX PER VINCERE ***
+                    // Resistenza finale: ridotta da 60 a 45 punti per tick.
+                    // 450 punti/sec vs il tuo click di ~700 punti. VINCI SE CLICCHI BENE.
+                    increaseAmount = 45; 
+                    phaseBadge.innerText = "STATO: CALMA APPARENTE";
+                    phaseBadge.style.background = "green";
+                }
+
+                acidLevel += increaseAmount;
                 
                 if (acidLevel >= maxAcid) {
                     triggerGameOver();
                 }
 
                 updateDisplay();
-            }, 100);
+            }, 100); 
         }
 
-        // Avvio iniziale
         startGame();
 
         function updateDisplay() {
-            let displayAcid = acidLevel > maxAcid ? maxAcid : acidLevel;
-            acidEl.innerText = displayAcid;
-            
+            let displayAcid = acidLevel > maxAcid ? maxAcid : (acidLevel < 0 ? 0 : acidLevel);
+            acidEl.innerText = Math.floor(displayAcid);
             let percentage = (displayAcid / maxAcid) * 100;
             acidBar.style.width = percentage + "%";
-
-            if(percentage > 75) acidBar.style.backgroundPosition = "100% 0%"; 
-            else acidBar.style.backgroundPosition = "0% 0%"; 
         }
 
-        // --- GAME OVER + GIF FIX ---
-       function triggerGameOver() {
+        function triggerGameOver() {
             isGameOver = true;
             clearInterval(gameInterval);
-            gameOverScreen.style.display = "flex";
+            document.body.classList.remove('phase-angry', 'phase-fury');
             
-            // Inseriamo il video MP4
-            // 'playsinline' è FONDAMENTALE per iPhone/Android
-            // 'muted' è OBBLIGATORIO per l'autoplay su tutti i browser moderni
-            gifContainer.innerHTML = `
-                <video autoplay loop muted playsinline width="100%">
-                    <source src="pugno.mp4" type="video/mp4">
-                </video>
-            `;
+            endScreen.style.display = "flex";
+            endScreen.className = "overlay-screen game-over-mode";
+            endTitle.innerText = "FATAL ERROR";
+            endSubtitle.innerHTML = "IL NASO È ANDATO.<br>ARRUPIGGHITI.";
+            
+            winMessage.style.display = "none";
+            gifContainer.style.display = "flex";
+            
+            gameOverSound.play().catch(e=>{});
+
+            gifContainer.innerHTML = `<video autoplay loop muted playsinline width="100%"><source src="pugno.mp4" type="video/mp4"></video>`;
         }
 
-        // --- FUNZIONE RESET MIGLIORATA ---
-        // Questa funzione resetta tutto senza dover ricaricare la pagina
+        function triggerVictory() {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            document.body.classList.remove('phase-angry', 'phase-fury');
+            
+            endScreen.style.display = "flex";
+            endScreen.className = "overlay-screen victory-mode";
+            endTitle.innerText = "MIRACOLO A FRIGINTINI... PÌ ORA";
+            endSubtitle.innerHTML = "TI SALVASTI PÌ N'PILU<br>BEDDAMATRI";
+            
+            gifContainer.style.display = "none";
+            winMessage.style.display = "block";
+            
+            winSound.play().catch(e=>{});
+        }
+
         function resetGame() {
+            stopAllAudio();
             isGameOver = false;
-            acidLevel = 5000;
+            acidLevel = 2000;
             isCooldown = false;
             
-            gameOverScreen.style.display = "none";
-            gifContainer.innerHTML = ""; // Pulisce la GIF per fermarla
+            endScreen.style.display = "none";
+            gifContainer.innerHTML = ""; 
             
             donaBtn.disabled = false;
             donaBtn.innerText = activeTexts[0];
+            document.body.className = ""; 
+            document.body.classList.remove('blur-mode'); 
             
             updateDisplay();
-            startGame(); // Riavvia il loop
+            startGame(); 
         }
 
-        // --- CLICK ---
+        blurBtn.addEventListener('click', function() {
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
+            blurBtn.disabled = true;
+            document.body.classList.add('blur-mode');
+
+            setTimeout(() => { memePopup.classList.add('visible'); }, 100);
+
+            setTimeout(() => {
+                memePopup.classList.remove('visible');
+                document.body.classList.remove('blur-mode');
+                blurBtn.disabled = false; 
+            }, 6000);
+        });
+
         donaBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (isCooldown || isGameOver) return;
 
+            if (navigator.vibrate) navigator.vibrate(50);
+            playRandomClick();
+
             isCooldown = true;
             donaBtn.disabled = true; 
 
-            let damage = Math.floor(Math.random() * 500) + 700;
-            acidLevel -= damage;
-            if (acidLevel < 0) acidLevel = 0;
+            // --- DANNO POTENZIATO ---
+            // Base aumentata a 550 per rendere possibile superare la resistenza finale
+            // Formula: 550 + 15% acidità
+            // A 1000 acidità (ultimo miglio) -> 550 + 150 = 700 Danno.
+            // Rigenerazione nemico = 450.
+            // Guadagno netto = 250 punti a colpo. VITTORIA POSSIBILE.
+            let dynamicDamage = 550 + (acidLevel * 0.15);
+            
+            acidLevel -= dynamicDamage;
+            
+            if (acidLevel <= 0) {
+                acidLevel = 0;
+                updateDisplay();
+                triggerVictory();
+                return;
+            }
 
             donations++;
             donationEl.innerText = donations;
@@ -418,38 +496,32 @@
             spawnRain();
             
             let randomWord = hitWords[Math.floor(Math.random() * hitWords.length)];
-            spawnFloatingText(e.clientX, e.clientY, randomWord);
+            spawnFloatingText(e.clientX, e.clientY, randomWord, 'var(--acid-yellow)');
+            spawnFloatingText(e.clientX, e.clientY - 40, `-${Math.floor(dynamicDamage)}`, 'var(--alert-red)');
 
             updateDisplay();
 
+            // COOLDOWN: 1 SECONDO
             setTimeout(() => {
                 if(!isGameOver) {
                     isCooldown = false;
                     donaBtn.disabled = false;
                     donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
                 }
-            }, 1000); 
+            }, 1000);
         });
 
-        // --- FLOATING TEXT ---
-        function spawnFloatingText(x, y, text) {
+        function spawnFloatingText(x, y, text, color) {
             const el = document.createElement('div');
             el.className = 'floating-text';
             el.innerText = text;
-            
-            if (!x || !y) {
-                el.style.left = '50%';
-                el.style.top = '40%';
-            } else {
-                el.style.left = x + 'px';
-                el.style.top = y + 'px';
-            }
-            
+            el.style.color = color;
+            if (!x || !y) { el.style.left = '50%'; el.style.top = '40%'; } 
+            else { el.style.left = x + 'px'; el.style.top = y + 'px'; }
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 700);
+            setTimeout(() => el.remove(), 800);
         }
 
-        // --- PIOGGIA ---
         function spawnRain() {
             const count = 12; 
             for (let i = 0; i < count; i++) {
@@ -464,7 +536,6 @@
             }
         }
 
-        // --- RECENSIONI ---
         function initReviews() {
             reviewsGrid.innerHTML = '';
             for(let i=0; i<3; i++) {
@@ -481,21 +552,13 @@
             for(let i=0; i<3; i++) {
                 const slot = document.getElementById('review-slot-' + i);
                 const rev = shuffled[i];
-                slot.innerHTML = `
-                    <div class="review-author">${rev.name}</div>
-                    <div class="review-text">"${rev.text}"</div>
-                    <div class="stars">★★★★★</div>
-                `;
+                const starRating = rev.stars ? rev.stars : "★★★★★";
+                slot.innerHTML = `<div class="review-author">${rev.name}</div><div class="review-text">"${rev.text}"</div><div class="stars">${starRating}</div>`;
             }
         }
 
         initReviews();
-        setInterval(updateReviewsContent, 9000);
-
+        setInterval(updateReviewsContent, 10000);
     </script>
 </body>
 </html>
-
-
-
-
