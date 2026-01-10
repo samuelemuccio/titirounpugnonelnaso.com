@@ -324,7 +324,7 @@
 
         let acidLevel = 5000;
         let maxAcid = 10000;
-        let donations = Math.floor(Math.random() * 70) + 238; 
+        let donations = Math.floor(Math.random() * 70) + 138; 
         let isCooldown = false; 
         let isGameOver = false;
         let gameInterval = null;
@@ -338,14 +338,14 @@
             gameInterval = setInterval(() => {
                 if(isGameOver) return;
 
-                acidLevel += Math.floor(Math.random() * 30) + 10;
+                acidLevel += Math.floor(Math.random() * 50) + 40;
                 
                 if (acidLevel >= maxAcid) {
                     triggerGameOver();
                 }
 
                 updateDisplay();
-            }, 200);
+            }, 100);
         }
 
         // Avvio iniziale
@@ -487,3 +487,4 @@
     </script>
 </body>
 </html>
+
