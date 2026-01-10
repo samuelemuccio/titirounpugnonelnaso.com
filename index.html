@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOS NASO FRIGINTINI</title>
+    <title>SOS NASO FRIGINTINI - ULTIMATE</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
@@ -11,23 +11,69 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
-            overscroll-behavior: none; /* Blocca aggiornamento involontario */
-            width: 100%;
-            height: 100%;
+            overscroll-behavior: none;
+            width: 100%; height: 100%;
+            overflow: hidden; /* Blocca tutto per il game over */
         }
 
         body {
             background-color: #e0e0e0;
             font-family: 'Press Start 2P', cursive;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding-top: 50px; 
-            color: #000;
-            overflow-y: scroll; 
-            overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            padding-top: 50px; color: #000;
+            transition: background-color 0.2s;
             position: relative;
+        }
+
+        /* --- EFFETTI "INSANE" (PANICO) --- */
+        @keyframes panic-shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .panic-mode body {
+            animation: panic-shake 0.5s infinite;
+            background-color: #ffcccc; /* Sfondo rossastro */
+        }
+        
+        /* Lampeggiante rosso estremo */
+        .critical-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: red; opacity: 0; pointer-events: none; z-index: 50;
+            transition: opacity 0.1s;
+        }
+
+        /* --- GAME OVER SCREEN --- */
+        #game-over {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 9999; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center; color: red;
+        }
+        #game-over h1 { font-size: 2rem; margin-bottom: 20px; text-shadow: 2px 2px white; }
+        #game-over p { color: white; margin-bottom: 30px; font-size: 0.8rem; line-height: 2; }
+        .restart-btn {
+            background: white; color: black; border: 4px solid red; padding: 20px;
+            font-family: 'Press Start 2P'; cursor: pointer; text-transform: uppercase;
+        }
+
+        /* --- FLOATING TEXT (COMBO) --- */
+        .floating-text {
+            position: absolute; color: #ff00ff; font-weight: bold; font-size: 1rem;
+            pointer-events: none; text-shadow: 2px 2px 0 #000; z-index: 150;
+            animation: floatUp 1s forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
         }
 
         /* --- BARRA NEWS --- */
@@ -51,22 +97,23 @@
             position: relative; z-index: 10; display: flex; flex-direction: column;
             align-items: center; width: 100%; padding: 10px;
             padding-bottom: 50px;
+            overflow-y: scroll; height: 100vh; /* Scroll solo qui */
         }
 
         header {
             background: #fff; border: 4px solid #000; padding: 10px 15px; margin-bottom: 15px;
             box-shadow: 6px 6px 0px #000; text-align: center; width: 100%; max-width: 600px;
+            flex-shrink: 0;
         }
         h1 { font-size: 0.8rem; line-height: 1.5; text-transform: uppercase; color: #cc0000; }
         
-        /* --- CARD --- */
         .card {
             background-color: #fff; border: 5px solid #ff0000; padding: 15px; width: 100%; max-width: 500px;
             text-align: center; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); margin-bottom: 20px;
+            flex-shrink: 0;
         }
         .card-content { display: flex; flex-direction: column; align-items: center; gap: 10px; }
         p { font-size: 0.7rem; line-height: 1.6; text-transform: uppercase; }
-        
         .highlight { background: yellow; padding: 0 5px; font-weight: bold; }
 
         .product-img {
@@ -74,22 +121,18 @@
             background: white; transform: rotate(-3deg); transition: transform 0.1s ease;
         }
         
-        /* --- STATISTICHE --- */
         .stats-container {
             width: 100%; border: 3px solid #000; background: #eee; padding: 10px;
             font-size: 0.6rem; margin-top: 5px; display: flex; flex-direction: column; gap: 5px;
         }
-
         .acid-box { color: red; font-weight: bold;}
         .donation-box { color: blue; }
 
-        /* --- BOTTONE --- */
         .btn {
             background-color: #ffcccc; border: 4px solid #000; color: #000; padding: 15px 10px; width: 100%;
             font-family: 'Press Start 2P', cursive; font-size: 0.8rem; cursor: pointer;
             box-shadow: 4px 4px 0px #000; display: inline-block; user-select: none; margin-top: 10px;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-            transition: all 0.1s;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: all 0.1s;
         }
         .btn:disabled {
             background-color: #999; color: #fff; border-color: #555;
@@ -97,43 +140,42 @@
         }
         .btn:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; background-color: #55ff55; }
 
-        /* --- GRIGLIA RECENSIONI (3 in Colonna) --- */
         .reviews-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Una colonna singola */
-            gap: 12px;
-            width: 100%; max-width: 500px;
-            margin-top: 20px;
+            display: grid; grid-template-columns: 1fr; gap: 12px;
+            width: 100%; max-width: 500px; margin-top: 20px; padding-bottom: 40px;
         }
-
         .review-card {
             background: #fff; border: 2px solid #000; padding: 10px;
-            font-size: 0.6rem; text-align: left;
-            box-shadow: 3px 3px 0px #ccc;
-            display: flex; flex-direction: column; justify-content: center;
-            min-height: 80px; /* Altezza minima */
+            font-size: 0.6rem; text-align: left; box-shadow: 3px 3px 0px #ccc;
+            display: flex; flex-direction: column; justify-content: center; min-height: 80px;
         }
-
         .review-author { font-weight: bold; margin-bottom: 5px; color: #d32f2f; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
         .review-text { line-height: 1.4; flex-grow: 1; }
         .stars { color: gold; text-shadow: 1px 1px 0 #000; margin-top: 5px; text-align: right; font-size: 0.5rem;}
 
-        /* --- PIOGGIA --- */
         .falling-item {
             position: fixed; top: -100px; z-index: 100; pointer-events: none;
             width: 50px; height: auto; will-change: transform; animation: fall linear forwards; 
         }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 0.7rem; }
-        }
+        @media (max-width: 480px) { h1 { font-size: 0.7rem; } }
     </style>
 </head>
 <body>
+
+    <div class="critical-overlay" id="crit-overlay"></div>
+
+    <div id="game-over">
+        <h1>GAME OVER</h1>
+        <p>
+            SEI STATO TROPPO LENTO.<br>
+            IL PUGNO È ARRIVATO.<br>
+            NASO FRATTURATO.<br><br>
+            RIPROVA SE HAI IL CORAGGIO.
+        </p>
+        <button class="restart-btn" onclick="location.reload()">RICOMINCIA</button>
+    </div>
 
     <div class="breaking-news">
         <p>⚠️ ULTIM'ORA: LIVELLI DI ACIDITÀ A FRIGINTINI FUORI SCALA -- RISCHIO PUGNO SUL NASO IMMINENTE -- ⚠️</p>
@@ -167,8 +209,7 @@
                 <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA</button>
             </div>
 
-            <div class="reviews-grid" id="reviews-grid">
-                </div>
+            <div class="reviews-grid" id="reviews-grid"></div>
         </main>
     </div>
 
@@ -178,62 +219,93 @@
         const acidEl = document.getElementById('acid-level');
         const donationEl = document.getElementById('donation-count');
         const reviewsGrid = document.getElementById('reviews-grid');
+        const body = document.body;
+        const critOverlay = document.getElementById('crit-overlay');
+        const gameOverScreen = document.getElementById('game-over');
         const imageFile = 'gaviscon.png'; 
 
-        const cooldownTexts = [
-            "GRAZIE MBARE!", "ASPETTA N'ATTIMU", "A POSTU!", "CALMA...", 
-            "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"
-        ];
+        const cooldownTexts = ["GRAZIE MBARE!", "ASPETTA...", "A POSTU!", "CALMA...", "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"];
+        const activeTexts = ["DAI GAVISCON!", "SALVATI IL NASO!", "DONA ORA!", "PLACA LA BESTIA"];
+        const floatTexts = ["-500 ACIDITÀ", "GAVISCON!", "SCICLI POWER", "MODICA DOC", "SALVO!", "MIRACOLO!"];
 
-        const activeTexts = [
-            "DAI GAVISCON!", "SALVATI IL NASO!", "DONA ORA!", "PLACA LA BESTIA"
-        ];
-
-        // --- DATABASE MEME EDITION ---
         const reviewsData = [
             { name: "Giulia Senpai House", text: "Ma che è sta cafonata muccio? Però utile, 5 stelle pì l'impegno." },
-            { name: "Sara Alfieri (Scicli)", text: "Gioia mia, ma chi è stu burdellu? Cmq funziona, l'acidu mi passau e sugnu a postu." },
+            { name: "Sara Alfieri (Scicli)", text: "Gioia mia, ma chi è stu burdellu? Cmq funziona, l'acidu mi passau." },
             { name: "Kevin", text: "Fratellì, mi hai salvato la vita. Stavo per prendere un destro allucinante." },
-            { name: "Blandiv", text: "Genio assoluto. Ora posso droppare nuove canzoni ndi istagram restate sintonizzati carusi." },
+            { name: "Blandiv", text: "Genio assoluto. Ora posso droppare nuove canzoni ndi istagram." },
             { name: "Saro Occhipinti (Modica)", text: "Mi salvasti a vita. Stava partennu un gancio." },
-            { name: "Maria Concetta (Ispica)", text: "Bedda matri, pareva l'Esorcista! Cci vuliva l'acqua santa e du bustine di Gaviscon." },
+            { name: "Maria Concetta (Ispica)", text: "Bedda matri, pareva l'Esorcista! Cci vuliva l'acqua santa." },
             { name: "Peppe Cannata (Scicli)", text: "Dona, dona, ca chista è pericolosa assai." },
             { name: "Turi Buscema (Ispica)", text: "Minchia che botta d'acitu... menu mali ca c'è stu situ." },
             { name: "Salvo Ruta (Modica Bassa)", text: "A prima mi pareva na babbata, poi mi arrivau na cinquina." },
-            { name: "Saro (Pozzallo Porto)", text: "Mare mosso forza 9, acidità forza 10. Mi salvai pi miracolo." },
             { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." },
-            { name: "Dott. Gaviscon (Primario)", text: "Confermo, questo è l'unico metodo scientifico per evitare trauma facciale a Frigintini." },
-            { name: "L'Americano (Turista)", text: "I don't understand dialects but I donated Gaviscon and I am still alive. Good job." } 
+            { name: "Dott. Gaviscon", text: "Confermo, unico metodo scientifico per evitare trauma facciale." },
+            { name: "L'Americano", text: "I don't understand dialects but I donated Gaviscon and I am alive." } 
         ];
 
         let acidLevel = 5000;
         let donations = Math.floor(Math.random() * 40) + 138; 
         let isCooldown = false; 
+        let isDead = false;
 
         donationEl.innerText = donations;
 
         // --- GAME LOOP ---
         setInterval(() => {
-            acidLevel += Math.floor(Math.random() * 20) + 5;
+            if(isDead) return;
+
+            // L'acidità sale sempre più veloce man mano che vai avanti
+            let difficultyMultiplier = 1 + (donations / 200);
+            acidLevel += Math.floor((Math.random() * 25 + 10) * difficultyMultiplier);
+            
             updateDisplay();
+            checkGameState();
         }, 200);
+
+        function checkGameState() {
+            // EFFETTO PANICO (Sopra 7000)
+            if (acidLevel > 7000) {
+                body.classList.add('panic-mode'); // Trema tutto
+                critOverlay.style.opacity = (acidLevel - 7000) / 3000; // Diventa sempre più rosso
+            } else {
+                body.classList.remove('panic-mode');
+                critOverlay.style.opacity = 0;
+            }
+
+            // GAME OVER (Sopra 10000)
+            if (acidLevel >= 10000) {
+                triggerGameOver();
+            }
+        }
+
+        function triggerGameOver() {
+            if(isDead) return;
+            isDead = true;
+            // Vibrazione lunga di morte
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 1000]);
+            gameOverScreen.style.display = 'flex';
+        }
 
         function updateDisplay() {
             acidEl.innerText = acidLevel;
-            if(acidLevel > 8000) { acidEl.style.color = "red"; }
-            else if (acidLevel < 2000) { acidEl.style.color = "green"; }
-            else { acidEl.style.color = "#cc6600"; }
+            if(acidLevel > 8000) acidEl.style.color = "red";
+            else if (acidLevel < 2000) acidEl.style.color = "green";
+            else acidEl.style.color = "#cc6600";
         }
 
         // --- CLICK ---
         donaBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            if (isCooldown) return;
+            if (isCooldown || isDead) return;
+
+            // VIBRAZIONE (Feedback Tattile)
+            if (navigator.vibrate) navigator.vibrate(50);
 
             isCooldown = true;
             donaBtn.disabled = true; 
 
-            let damage = Math.floor(Math.random() * 300) + 500;
+            // Danno Critico
+            let damage = Math.floor(Math.random() * 500) + 800;
             acidLevel -= damage;
             if (acidLevel < 0) acidLevel = 0;
 
@@ -243,35 +315,56 @@
             donaBtn.innerText = cooldownTexts[Math.floor(Math.random() * cooldownTexts.length)];
             
             spawnRain();
+            spawnFloatingText(e); // Testo fluttuante
             updateDisplay();
+            checkGameState(); // Aggiorna subito grafica panico
 
             setTimeout(() => {
-                isCooldown = false;
-                donaBtn.disabled = false;
-                donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
-            }, 1500); 
+                if(!isDead) {
+                    isCooldown = false;
+                    donaBtn.disabled = false;
+                    donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
+                }
+            }, 1200); 
         });
 
-        // --- PIOGGIA AUMENTATA ---
+        // --- VISUAL EFFECTS ---
+        function spawnFloatingText(e) {
+            const txt = document.createElement('div');
+            txt.className = 'floating-text';
+            txt.innerText = floatTexts[Math.floor(Math.random() * floatTexts.length)];
+            
+            // Posiziona dove hai cliccato (o al centro se mobile impreciso)
+            let x = e.clientX || window.innerWidth / 2;
+            let y = e.clientY || window.innerHeight / 2;
+            
+            // Correzione offset random
+            x += (Math.random() * 40 - 20);
+            
+            txt.style.left = x + 'px';
+            txt.style.top = y + 'px';
+            
+            document.body.appendChild(txt);
+            setTimeout(() => txt.remove(), 1000);
+        }
+
         function spawnRain() {
-            const count = 12; // Aumentato a 12 per più "particellari"
+            const count = 15; 
             for (let i = 0; i < count; i++) {
                 const img = document.createElement('img');
                 img.src = imageFile;
                 img.classList.add('falling-item');
                 img.style.left = Math.random() * 90 + 'vw'; 
-                img.style.animationDuration = (Math.random() * 1 + 1) + 's';
-                img.style.width = (Math.random() * 25 + 35) + 'px'; // Variabili tra 35 e 60px
+                img.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                img.style.width = (Math.random() * 25 + 35) + 'px';
                 document.body.appendChild(img);
-                
-                setTimeout(() => { img.remove(); }, 2000); 
+                setTimeout(() => { img.remove(); }, 1500); 
             }
         }
 
-        // --- RECENSIONI (3 in Colonna) ---
+        // --- RECENSIONI ---
         function initReviews() {
             reviewsGrid.innerHTML = '';
-            // Creiamo 3 slot fissi
             for(let i=0; i<3; i++) {
                 let div = document.createElement('div');
                 div.className = 'review-card';
@@ -282,9 +375,7 @@
         }
 
         function updateReviewsContent() {
-            // Mischia e prendi 3 recensioni
             const shuffled = [...reviewsData].sort(() => 0.5 - Math.random());
-            
             for(let i=0; i<3; i++) {
                 const slot = document.getElementById('review-slot-' + i);
                 const rev = shuffled[i];
@@ -298,8 +389,6 @@
 
         initReviews();
         setInterval(updateReviewsContent, 5000);
-
     </script>
 </body>
 </html>
-
