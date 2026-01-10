@@ -11,16 +11,23 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
-            overscroll-behavior: none; /* Blocca aggiornamenti involontari */
-            width: 100%; height: 100%;
+            overscroll-behavior: none; /* Blocca aggiornamento involontario */
+            width: 100%;
+            height: 100%;
         }
 
         body {
             background-color: #e0e0e0;
             font-family: 'Press Start 2P', cursive;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; padding-top: 50px; 
-            color: #000; overflow-y: scroll; overflow-x: hidden; position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 50px; 
+            color: #000;
+            overflow-y: scroll; 
+            overflow-x: hidden;
+            position: relative;
         }
 
         /* --- BARRA NEWS --- */
@@ -42,7 +49,8 @@
         /* --- LAYOUT --- */
         .content-wrapper {
             position: relative; z-index: 10; display: flex; flex-direction: column;
-            align-items: center; width: 100%; padding: 10px; padding-bottom: 50px;
+            align-items: center; width: 100%; padding: 10px;
+            padding-bottom: 50px;
         }
 
         header {
@@ -51,7 +59,7 @@
         }
         h1 { font-size: 0.8rem; line-height: 1.5; text-transform: uppercase; color: #cc0000; }
         
-        /* --- CARD PRINCIPALE --- */
+        /* --- CARD --- */
         .card {
             background-color: #fff; border: 5px solid #ff0000; padding: 15px; width: 100%; max-width: 500px;
             text-align: center; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); margin-bottom: 20px;
@@ -71,6 +79,7 @@
             width: 100%; border: 3px solid #000; background: #eee; padding: 10px;
             font-size: 0.6rem; margin-top: 5px; display: flex; flex-direction: column; gap: 5px;
         }
+
         .acid-box { color: red; font-weight: bold;}
         .donation-box { color: blue; }
 
@@ -79,7 +88,8 @@
             background-color: #ffcccc; border: 4px solid #000; color: #000; padding: 15px 10px; width: 100%;
             font-family: 'Press Start 2P', cursive; font-size: 0.8rem; cursor: pointer;
             box-shadow: 4px 4px 0px #000; display: inline-block; user-select: none; margin-top: 10px;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: all 0.1s;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            transition: all 0.1s;
         }
         .btn:disabled {
             background-color: #999; color: #fff; border-color: #555;
@@ -87,32 +97,40 @@
         }
         .btn:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; background-color: #55ff55; }
 
-        /* --- LISTA RECENSIONI (Singola Colonna) --- */
-        .reviews-list {
-            display: flex; flex-direction: column; gap: 15px; /* Spazio verticale tra i commenti */
-            width: 100%; max-width: 500px; margin-top: 10px;
+        /* --- GRIGLIA RECENSIONI (3 in Colonna) --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Una colonna singola */
+            gap: 12px;
+            width: 100%; max-width: 500px;
+            margin-top: 20px;
         }
 
         .review-card {
             background: #fff; border: 2px solid #000; padding: 10px;
             font-size: 0.6rem; text-align: left;
-            box-shadow: 4px 4px 0px #ccc;
-            display: flex; flex-direction: column; justify-content: space-between;
-            min-height: 90px;
+            box-shadow: 3px 3px 0px #ccc;
+            display: flex; flex-direction: column; justify-content: center;
+            min-height: 80px; /* Altezza minima */
         }
 
-        .review-author { font-weight: bold; margin-bottom: 5px; color: #d32f2f; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
-        .review-text { line-height: 1.4; flex-grow: 1; margin-bottom: 5px; }
-        .stars { color: gold; text-shadow: 1px 1px 0 #000; text-align: right; font-size: 0.7rem; }
+        .review-author { font-weight: bold; margin-bottom: 5px; color: #d32f2f; border-bottom: 1px dashed #ccc; padding-bottom: 3px; }
+        .review-text { line-height: 1.4; flex-grow: 1; }
+        .stars { color: gold; text-shadow: 1px 1px 0 #000; margin-top: 5px; text-align: right; font-size: 0.5rem;}
 
         /* --- PIOGGIA --- */
         .falling-item {
             position: fixed; top: -100px; z-index: 100; pointer-events: none;
             width: 50px; height: auto; will-change: transform; animation: fall linear forwards; 
         }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-        @media (max-width: 480px) { h1 { font-size: 0.7rem; } }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 0.7rem; }
+        }
     </style>
 </head>
 <body>
@@ -149,7 +167,7 @@
                 <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA</button>
             </div>
 
-            <div class="reviews-list" id="reviews-list">
+            <div class="reviews-grid" id="reviews-grid">
                 </div>
         </main>
     </div>
@@ -159,23 +177,21 @@
         const donaBtn = document.getElementById('donaBtn');
         const acidEl = document.getElementById('acid-level');
         const donationEl = document.getElementById('donation-count');
-        const reviewsList = document.getElementById('reviews-list');
+        const reviewsGrid = document.getElementById('reviews-grid');
         const imageFile = 'gaviscon.png'; 
 
-        // Frasi Cooldown
         const cooldownTexts = [
-            "GRAZIE MBARE!", "ASPETTA N'ATTIMU", "A POSTU!", 
-            "CALMA...", "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"
+            "GRAZIE MBARE!", "ASPETTA N'ATTIMU", "A POSTU!", "CALMA...", 
+            "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"
         ];
 
-        // Frasi Attive
         const activeTexts = [
             "DAI GAVISCON!", "SALVATI IL NASO!", "DONA ORA!", "PLACA LA BESTIA"
         ];
 
-        // --- DATABASE RECENSIONI AGGIORNATO ---
+        // --- DATABASE MEME EDITION ---
         const reviewsData = [
-           { name: "Giulia Senpai House", text: "Ma che è sta cafonata muccio? Però utile, 5 stelle pì l'impegno." },
+            { name: "Giulia Senpai House", text: "Ma che è sta cafonata muccio? Però utile, 5 stelle pì l'impegno." },
             { name: "Sara Alfieri (Scicli)", text: "Gioia mia, ma chi è stu burdellu? Cmq funziona, l'acidu mi passau e sugnu a postu." },
             { name: "Kevin", text: "Fratellì, mi hai salvato la vita. Stavo per prendere un destro allucinante." },
             { name: "Blandiv", text: "Genio assoluto. Ora posso droppare nuove canzoni ndi istagram restate sintonizzati carusi." },
@@ -187,13 +203,12 @@
             { name: "Saro (Pozzallo Porto)", text: "Mare mosso forza 9, acidità forza 10. Mi salvai pi miracolo." },
             { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." }
             { name: "Dott. Gaviscon (Primario)", text: "Confermo, questo è l'unico metodo scientifico per evitare trauma facciale a Frigintini." },
-            { name: "L'Americano (Turista)", text: "I don't understand dialects but I donated Gaviscon and I am still alive. Good job." }
+            { name: "L'Americano (Turista)", text: "I don't understand dialects but I donated Gaviscon and I am still alive. Good job." } 
         ];
 
-        // STATO DEL GIOCO
         let acidLevel = 5000;
-        let donations = Math.floor(Math.random() * 40) + 138;
-        let isCooldown = false;
+        let donations = Math.floor(Math.random() * 40) + 138; 
+        let isCooldown = false; 
 
         donationEl.innerText = donations;
 
@@ -216,9 +231,8 @@
             if (isCooldown) return;
 
             isCooldown = true;
-            donaBtn.disabled = true;
+            donaBtn.disabled = true; 
 
-            // Danno ridotto
             let damage = Math.floor(Math.random() * 300) + 500;
             acidLevel -= damage;
             if (acidLevel < 0) acidLevel = 0;
@@ -235,38 +249,40 @@
                 isCooldown = false;
                 donaBtn.disabled = false;
                 donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
-            }, 1500);
+            }, 1500); 
         });
 
-        // --- PIOGGIA (Aumentata un po') ---
+        // --- PIOGGIA AUMENTATA ---
         function spawnRain() {
-            const count = 8; // Aumentato da 5 a 8 per più caos
+            const count = 12; // Aumentato a 12 per più "particellari"
             for (let i = 0; i < count; i++) {
                 const img = document.createElement('img');
                 img.src = imageFile;
                 img.classList.add('falling-item');
                 img.style.left = Math.random() * 90 + 'vw'; 
                 img.style.animationDuration = (Math.random() * 1 + 1) + 's';
-                img.style.width = (Math.random() * 20 + 40) + 'px';
+                img.style.width = (Math.random() * 25 + 35) + 'px'; // Variabili tra 35 e 60px
                 document.body.appendChild(img);
+                
                 setTimeout(() => { img.remove(); }, 2000); 
             }
         }
 
-        // --- RECENSIONI (3 a colonna) ---
+        // --- RECENSIONI (3 in Colonna) ---
         function initReviews() {
-            reviewsList.innerHTML = '';
+            reviewsGrid.innerHTML = '';
             // Creiamo 3 slot fissi
             for(let i=0; i<3; i++) {
                 let div = document.createElement('div');
                 div.className = 'review-card';
                 div.id = 'review-slot-' + i;
-                reviewsList.appendChild(div);
+                reviewsGrid.appendChild(div);
             }
             updateReviewsContent();
         }
 
         function updateReviewsContent() {
+            // Mischia e prendi 3 recensioni
             const shuffled = [...reviewsData].sort(() => 0.5 - Math.random());
             
             for(let i=0; i<3; i++) {
@@ -286,4 +302,3 @@
     </script>
 </body>
 </html>
-
