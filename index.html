@@ -204,9 +204,12 @@
         #gifContainer {
             margin: 20px 0; width: 100%; max-width: 400px; display: flex; justify-content: center;
         }
-        #gifContainer img {
-            max-width: 100%; height: auto; border: 5px solid var(--alert-red);
+       #gifContainer video {
+            max-width: 100%; 
+            height: auto; 
+            border: 5px solid var(--alert-red);
             box-shadow: 0 0 20px var(--alert-red);
+            display: block; /* Aiuta il layout */
         }
 
         .game-over-text { 
@@ -243,7 +246,7 @@
 <body>
 
     <div class="breaking-news">
-        <p>⚠️ ALLARME LIVELLO ACIDITÀ TOSSICO // RISCHIO PUGNO IMMINENTE // SE ARRIVA A 10.000 SEI FINITO // DONA ORA ORA ORA ⚠️</p>
+        <p>⚠️ ALLARME LIVELLO ACIDITÀ TOSSICO // RISCHIO PUGNO IMMINENTE // SALVA FRIGINTINI // DONA ORA ORA ORA ⚠️</p>
     </div>
 
     <div class="game-over-screen" id="gameOverScreen">
@@ -264,7 +267,7 @@
             <div class="card-content">
                 <p>
                     ATTENZIONE!<br>
-                    LIVELLI CRITICI.<br><br>
+                    LIVELLI CRITICI DI ACIDITÀ A FRIGINTINI<br><br>
                     <span class="highlight">ABBASSA L'ACIDITÀ</span><br>
                     PRIMA DELL'IMPATTO.
                 </p>
@@ -363,14 +366,19 @@
         }
 
         // --- GAME OVER + GIF FIX ---
-        function triggerGameOver() {
+       function triggerGameOver() {
             isGameOver = true;
             clearInterval(gameInterval);
             gameOverScreen.style.display = "flex";
             
-            // TRUCCO TIMESTAMP: Aggiunge ?v=random per costringere il browser a ricaricare la GIF
-            let timestamp = new Date().getTime();
-            gifContainer.innerHTML = `<img src="pugno.gif" alt="PUGNO">`;
+            // Inseriamo il video MP4
+            // 'playsinline' è FONDAMENTALE per iPhone/Android
+            // 'muted' è OBBLIGATORIO per l'autoplay su tutti i browser moderni
+            gifContainer.innerHTML = `
+                <video autoplay loop muted playsinline width="100%">
+                    <source src="pugno.mp4" type="video/mp4">
+                </video>
+            `;
         }
 
         // --- FUNZIONE RESET MIGLIORATA ---
@@ -487,5 +495,6 @@
     </script>
 </body>
 </html>
+
 
 
