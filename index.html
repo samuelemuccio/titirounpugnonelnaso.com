@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOS NASO FRIGINTINI: FINAL BOSS</title>
+    <title>SOS FRUSTRATI</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET & BASE --- */
+        /* --- PALETTE --- */
+        :root {
+            --acid-yellow: #ffeb00; 
+            --shock-pink: #ff00ff;
+            --brutal-black: #111111; 
+            --deep-blue: #220044; 
+            --raw-white: #ffffff;
+            --alert-red: #ff2200;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
@@ -16,55 +25,32 @@
         }
 
         body {
-            /* Sfondo animato di base */
-            background: linear-gradient(45deg, #ff0000, #ffeb3b, #00ff00);
-            background-size: 400% 400%;
+            background-color: var(--deep-blue);
+            background-image: 
+                linear-gradient(45deg, var(--brutal-black) 25%, transparent 25%), 
+                linear-gradient(-45deg, var(--brutal-black) 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, var(--brutal-black) 75%), 
+                linear-gradient(-45deg, transparent 75%, var(--brutal-black) 75%);
+            background-size: 20px 20px;
+            
             font-family: 'Press Start 2P', cursive;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; padding-top: 50px; color: #000;
-            overflow-y: scroll; overflow-x: hidden; position: relative;
-            animation: gradientBG 10s ease infinite;
-            transition: all 0.2s;
+            min-height: 100vh; padding-top: 50px; color: var(--raw-white);
+            overflow: hidden; position: relative;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Classe per quando l'acidità è CRITICA (Sfondo Rosso lampeggiante) */
-        body.critical-state {
-            animation: panicMode 0.5s infinite alternate !important;
-        }
-        @keyframes panicMode {
-            from { background: #ff0000; }
-            to { background: #000000; }
-        }
-
-        /* --- IL PUGNO GIGANTE (BOSS) --- */
-        .giant-fist {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 10rem;
-            opacity: 0.1;
-            z-index: 1; /* Dietro al contenuto */
-            pointer-events: none;
-            transition: all 0.5s ease;
-        }
-
-        /* --- BARRA NEWS --- */
+        /* --- NEWS BAR --- */
         .breaking-news {
             position: fixed; top: 0; left: 0; width: 100%;
-            background: #000; border-bottom: 4px solid #fff;
-            padding: 8px 0; z-index: 200; white-space: nowrap; overflow: hidden;
-            pointer-events: none;
+            background: var(--acid-yellow);
+            color: var(--brutal-black);
+            border-bottom: 4px solid var(--brutal-black);
+            padding: 10px 0; z-index: 200; white-space: nowrap; overflow: hidden;
         }
         .breaking-news p {
-            display: inline-block; font-size: 0.6rem; color: #00ff00; font-weight: bold;
-            text-shadow: 2px 2px #ff00ff;
-            animation: scroll-text 15s linear infinite;
+            display: inline-block; font-size: 0.7rem; font-weight: bold;
+            text-transform: uppercase;
+            animation: scroll-text 10s linear infinite;
         }
         @keyframes scroll-text {
             0% { transform: translateX(100%); }
@@ -73,165 +59,228 @@
 
         /* --- LAYOUT --- */
         .content-wrapper {
-            position: relative; z-index: 10; display: flex; flex-direction: column;
-            align-items: center; width: 100%; padding: 10px; padding-bottom: 50px;
+            position: relative; z-index: 10; 
+            display: flex; flex-direction: column; align-items: center; 
+            width: 100%; max-width: 550px;
+            padding: 15px; height: 100%; overflow-y: auto;
         }
 
-        /* Header più cattivo */
         header {
-            background: #fff; border: 4px solid #000; padding: 10px 15px; margin-bottom: 15px;
-            box-shadow: 8px 8px 0px #000; text-align: center; width: 100%; max-width: 600px;
-            transform: rotate(-1deg);
+            margin-bottom: 25px; text-align: center;
+            background: var(--raw-white);
+            border: 4px solid var(--brutal-black);
+            box-shadow: 6px 6px 0px var(--acid-yellow);
+            padding: 15px;
+            transform: rotate(-1deg); color: var(--brutal-black);
         }
-        h1 { font-size: 0.8rem; line-height: 1.5; text-transform: uppercase; color: #000; }
+        h1 { 
+            font-size: 1rem; line-height: 1.5; 
+            text-transform: uppercase;
+        }
         
         /* --- CARD --- */
         .card {
-            background-color: #fff; border: 6px solid #000; padding: 15px; width: 100%; max-width: 500px;
-            text-align: center; box-shadow: 10px 10px 0px rgba(0,0,0,0.5); margin-bottom: 20px;
-            position: relative;
+            background-color: var(--raw-white); color: var(--brutal-black);
+            border-radius: 0px; border: 5px solid var(--brutal-black);
+            box-shadow: 8px 8px 0px var(--brutal-black);
+            padding: 25px; width: 100%;
+            text-align: center; margin-bottom: 25px;
         }
-        .card-content { display: flex; flex-direction: column; align-items: center; gap: 10px; }
         
-        /* Testo più leggibile e aggressivo */
-        p { font-size: 0.7rem; line-height: 1.6; text-transform: uppercase; font-weight: bold; }
+        .card-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
         
-        .highlight { background: #00ff00; color: black; padding: 2px 5px; border: 2px solid black; display: inline-block; transform: skew(-10deg); }
+        p { font-size: 0.8rem; line-height: 1.6; font-weight: bold;}
+        
+        .highlight { 
+            background: var(--shock-pink); color: var(--raw-white);
+            padding: 5px 10px; border: 3px solid var(--brutal-black);
+            display: inline-block; transform: skew(-5deg);
+            text-shadow: 2px 2px 0px var(--brutal-black);
+        }
 
         .product-img {
-            max-width: 160px; width: 100%; height: auto; border: 3px solid #000; padding: 5px;
-            background: white; transform: rotate(-3deg); transition: transform 0.1s ease;
-            box-shadow: 5px 5px 0px #000;
+            max-width: 180px; width: 100%; height: auto; 
+            border: 4px solid var(--brutal-black);
+            box-shadow: 5px 5px 0px var(--acid-yellow);
+            background: var(--raw-white); padding: 10px;
+            transform: rotate(2deg); transition: transform 0.1s;
+        }
+        .product-img:active { transform: scale(0.95) rotate(0deg); }
+        
+        /* --- PROGRESS BAR (CORRETTA VISIBILITÀ) --- */
+        .progress-container {
+            width: 100%; 
+            background: var(--brutal-black); /* Sfondo nero */
+            height: 35px;
+            border: 4px solid var(--brutal-black);
+            margin-top: 10px; position: relative;
+        }
+        .progress-bar {
+            height: 100%; width: 50%;
+            background: linear-gradient(to right, var(--acid-yellow) 0%, var(--acid-yellow) 50%, var(--alert-red) 51%, var(--alert-red) 100%);
+            background-size: 200% 100%; background-position: 0% 0%;
+            transition: width 0.2s linear, background-position 0.3s ease;
+        }
+        /* FIX: Testo bianco su sfondo nero/giallo per massima leggibilità */
+        .progress-text {
+            position: absolute; width: 100%; top: 0; left: 0;
+            line-height: 27px; font-size: 0.7rem; 
+            color: var(--raw-white); /* BIANCO */
+            font-weight: bold; pointer-events: none;
+            text-shadow: 2px 2px 0 #000; /* Ombra nera per leggere anche sul giallo */
+            z-index: 5;
+        }
+
+        /* --- BOTTONE --- */
+        .btn {
+            background-color: var(--acid-yellow);
+            color: var(--brutal-black);
+            border: 4px solid var(--brutal-black);
+            padding: 25px 15px; width: 100%;
+            font-family: 'Press Start 2P', cursive; font-size: 1rem; text-transform: uppercase;
+            cursor: pointer; border-radius: 0px;
+            box-shadow: 8px 8px 0px var(--brutal-black);
+            margin-top: 15px; transition: all 0.05s;
+            touch-action: manipulation; position: relative; top: 0; left: 0;
         }
         
-        /* --- STATISTICHE --- */
-        .stats-container {
-            width: 100%; border: 4px solid #000; background: #fff; padding: 10px;
-            font-size: 0.6rem; margin-top: 5px; display: flex; flex-direction: column; gap: 8px;
-            box-shadow: inset 4px 4px 0px #eee;
-        }
-
-        .acid-box { color: #ff0000; text-shadow: 1px 1px 0px #000; font-size: 0.8rem; }
-        .donation-box { color: #0000ff; }
-
-        /* --- BOTTONE INSANE --- */
-        .btn {
-            background-color: #ff00ff; /* Fucsia violento */
-            border: 4px solid #000; color: #fff; padding: 20px 10px; width: 100%;
-            font-family: 'Press Start 2P', cursive; font-size: 0.9rem; cursor: pointer;
-            box-shadow: 6px 6px 0px #000; display: inline-block; user-select: none; margin-top: 15px;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 0px #000;
-            transition: all 0.05s;
-        }
-        .btn:disabled {
-            background-color: #555; color: #ccc; border-color: #000;
-            transform: translate(4px, 4px); box-shadow: 0px 0px 0px #000; cursor: not-allowed;
-        }
         .btn:active:not(:disabled) { 
-            transform: translate(6px, 6px); box-shadow: 0px 0px 0px #000; background-color: #00ff00; color: black;
+            top: 8px; left: 8px; box-shadow: 0px 0px 0px var(--brutal-black); 
+            background-color: var(--shock-pink); color: var(--raw-white);
+        }
+        
+        .btn:disabled {
+            background-color: #555; color: #999; border-color: #333;
+            box-shadow: 4px 4px 0px #222; top: 4px; left: 4px; cursor: not-allowed;
         }
 
-        /* --- FLOATING TEXT (RPG STYLE) --- */
+        /* --- SCRITTE VOLANTI --- */
         .floating-text {
-            position: absolute;
-            font-weight: bold;
-            font-size: 0.8rem;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            text-shadow: 2px 2px 0px #fff;
-            z-index: 200;
-            width: 200px; text-align: center;
+            position: absolute; font-weight: bold; font-size: 1rem;
+            pointer-events: none; animation: popUpBrutal 0.7s ease-out forwards;
+            z-index: 200; width: auto; white-space: nowrap; text-align: center;
+            color: var(--acid-yellow);
+            text-shadow: 3px 3px 0px var(--brutal-black);
+            border: 3px solid var(--brutal-black); background: var(--deep-blue);
+            padding: 5px 10px; transform: rotate(-5deg);
         }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        @keyframes popUpBrutal {
+            0% { transform: translateY(0) scale(0.5) rotate(-5deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-150px) scale(1.2) rotate(10deg); opacity: 0; }
         }
 
         /* --- GRIGLIA RECENSIONI --- */
         .reviews-grid {
-            display: grid; grid-template-columns: 1fr; gap: 15px;
-            width: 100%; max-width: 500px; margin-top: 20px;
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+            width: 100%; margin-top: 10px; color: var(--brutal-black);
         }
 
         .review-card {
-            background: #fff; border: 3px solid #000; padding: 10px;
-            font-size: 0.6rem; text-align: left;
-            box-shadow: 5px 5px 0px #000;
-            display: flex; flex-direction: column; justify-content: center;
-            min-height: 80px;
-            transform: rotate(1deg); /* Leggera rotazione per disordine */
+            background: var(--raw-white); border: 4px solid var(--brutal-black);
+            padding: 15px; font-size: 0.65rem; text-align: left;
+            border-radius: 0px;
+            box-shadow: 6px 6px 0px var(--acid-yellow);
+            transform: rotate(1deg);
         }
-        /* Alterniamo la rotazione per effetto "foglietti sparsi" */
-        .review-card:nth-child(even) { transform: rotate(-1deg); }
+        .review-card:nth-child(even) { transform: rotate(-1deg); box-shadow: 6px 6px 0px var(--shock-pink);}
 
-        .review-author { font-weight: bold; margin-bottom: 5px; color: #000; background: #ffff00; display: inline-block; padding: 2px; border: 1px solid black;}
-        .review-text { line-height: 1.4; flex-grow: 1; margin-top: 5px; }
-        .stars { color: #ff00ff; text-shadow: 1px 1px 0 #000; margin-top: 5px; text-align: right; font-size: 0.5rem;}
+        .review-author { 
+            font-weight: bold; margin-bottom: 8px; 
+            background: var(--acid-yellow); color: var(--brutal-black);
+            display: inline-block; padding: 3px 6px; border: 2px solid var(--brutal-black);
+        }
+        .review-text { line-height: 1.4; }
+        .stars { color: var(--shock-pink); margin-top: 8px; text-align: right; text-shadow: 2px 2px 0px var(--brutal-black);}
+
+        /* --- GAME OVER OVERLAY --- */
+        .game-over-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--brutal-black);
+            z-index: 9999; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--alert-red); text-align: center; padding: 20px;
+            border: 10px solid var(--alert-red);
+        }
+        #gifContainer {
+            margin: 20px 0; width: 100%; max-width: 400px; display: flex; justify-content: center;
+        }
+        #gifContainer img {
+            max-width: 100%; height: auto; border: 5px solid var(--alert-red);
+            box-shadow: 0 0 20px var(--alert-red);
+        }
+
+        .game-over-text { 
+            font-size: 2.5rem; text-transform: uppercase;
+            text-shadow: 4px 4px 0px #fff; animation: glitch 0.2s infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(2px, 0) skew(0deg); }
+            20% { transform: translate(-2px, 0) skew(2deg); }
+            40% { transform: translate(0, 2px) skew(0deg); }
+            60% { transform: translate(0, -2px) skew(-2deg); }
+            80% { transform: translate(2px, 0) skew(0deg); }
+            100% { transform: translate(0, 0) skew(0deg); }
+        }
+
+        .retry-btn {
+            background: var(--alert-red); color: white; border: 4px solid white;
+            padding: 20px 40px; font-family: inherit; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 8px 8px 0px white; position: relative; top:0; left:0;
+            margin-top: 20px;
+        }
+        .retry-btn:active { top: 6px; left: 6px; box-shadow: 2px 2px 0px white; }
 
         /* --- PIOGGIA --- */
         .falling-item {
             position: fixed; top: -100px; z-index: 100; pointer-events: none;
-            width: 50px; height: auto; will-change: transform; animation: fall linear forwards; 
-            filter: drop-shadow(4px 4px 0px #000); /* Ombra dura */
+            width: 60px; height: auto; animation: fall linear forwards; 
+            filter: drop-shadow(4px 4px 0px var(--brutal-black));
         }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(720deg); }
-        }
-
-        /* Animazione SHAKE dello schermo */
-        .shake-screen {
-            animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
-        }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-2px, 0, 0); }
-            20%, 80% { transform: translate3d(4px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
-            40%, 60% { transform: translate3d(8px, 0, 0); }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 0.7rem; }
-            .giant-fist { font-size: 5rem; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="giant-fist" id="giantFist">👊</div>
-
     <div class="breaking-news">
-        <p>⚠️ ULTIM'ORA: ALLERTA METEO 'PUGNI' A FRIGINTINI -- LIVELLO ACIDITÀ: TOSSICO -- PROTEGGETE I NASI -- ⚠️</p>
+        <p>⚠️ ALLARME LIVELLO ACIDITÀ TOSSICO // RISCHIO PUGNO IMMINENTE // SE ARRIVA A 10.000 SEI FINITO // DONA ORA ORA ORA ⚠️</p>
     </div>
 
-    <div class="content-wrapper" id="mainWrapper">
+    <div class="game-over-screen" id="gameOverScreen">
+        <div class="game-over-text">FATAL ERROR<br>GAME OVER</div>
+        
+        <div id="gifContainer"></div>
+
+        <p style="color:var(--raw-white); margin-top:20px; font-size:1rem;">IL NASO È ANDATO.<br>ARRUPIGGHITI.</p>
+        <button class="retry-btn" onclick="resetGame()">RESET SYSTEM</button>
+    </div>
+
+    <div class="content-wrapper">
         <header>
-            <h1>TITIROUNPUGNOSULNASO.COM</h1>
+            <h1>SOS<br>FRUSTRATI</h1>
         </header>
 
         <main class="card">
             <div class="card-content">
                 <p>
-                    ALLARME ROSSO!<br>
-                    SI STA AGITANDO.<br><br>
+                    ATTENZIONE!<br>
+                    LIVELLI CRITICI.<br><br>
                     <span class="highlight">ABBASSA L'ACIDITÀ</span><br>
                     PRIMA DELL'IMPATTO.
                 </p>
 
                 <img src="gaviscon.png" alt="Gaviscon" class="product-img" id="product-img">
                 
-                <div class="stats-container">
-                    <div class="acid-box">
-                        LIV. ACIDITÀ: <span id="acid-level">5000</span>%
-                    </div>
-                    <div class="donation-box">
-                        GAVISCON DONATI: <span id="donation-count">0</span>
-                    </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="acid-bar" style="width: 50%;"></div>
+                    <div class="progress-text">ACIDITÀ: <span id="acid-level">5000</span> / 10000</div>
+                </div>
+                
+                <div style="font-size: 0.7rem; color: var(--brutal-black); margin-top:10px; font-weight:bold; background:var(--acid-yellow); padding:5px; border:3px solid black;">
+                    SCORE GAVISCON: <span id="donation-count">0</span>
                 </div>
 
-                <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA</button>
+                <button type="button" class="btn" id="donaBtn">PLACA L'IRA ORA!</button>
             </div>
 
             <div class="reviews-grid" id="reviews-grid"></div>
@@ -239,29 +288,29 @@
     </div>
 
     <script>
-        /* --- CONFIGURAZIONE --- */
+        /* --- SETUP --- */
         const donaBtn = document.getElementById('donaBtn');
         const acidEl = document.getElementById('acid-level');
+        const acidBar = document.getElementById('acid-bar');
         const donationEl = document.getElementById('donation-count');
         const reviewsGrid = document.getElementById('reviews-grid');
-        const mainWrapper = document.getElementById('mainWrapper');
-        const body = document.body;
-        const giantFist = document.getElementById('giantFist');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const gifContainer = document.getElementById('gifContainer');
         const imageFile = 'gaviscon.png'; 
+
+        const hitWords = [
+            "SUCA!", "MINCHIA!", "ARRUPIGGHITI!", "CHI TI MANGIASTI?!", "TIÈ!", "BESTIA!", "AIA!"
+        ];
 
         const cooldownTexts = [
             "GRAZIE MBARE!", "ASPETTA...", "A POSTU!", "CALMA...", 
-            "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ", "STAI FERMO"
+            "RESPIRA...", "MINCHIA GRAZIE", "OK CUMPÀ"
         ];
+        const activeTexts = ["PLACA L'IRA!", "SALVA IL NASO!", "DONA ORA!", "SPINGI!", "ANCORA!"];
 
-        const activeTexts = [
-            "DAI GAVISCON!", "SALVATI IL NASO!", "DONA SUBITO!", "PLACA LA BESTIA", "SCUDO ATTIVO!"
-        ];
-
-        // --- DATABASE MEME EDITION (COMPLETO) ---
         const reviewsData = [
             { name: "Giulia Senpai House", text: "Ma che è sta cafonata muccio? Però utile, 5 stelle pì l'impegno." },
-            { name: "Sara Alfieri (Scicli)", text: "Gioia mia, ma chi è stu burdellu? Cmq funziona, l'acidu mi passau e sugnu a postu." },
+            { name: "Sara Alfieri (Scicli)", text: "Gioia mia, ma chi è stu burdellu? Cmq funziona, l'acidu mi passau." },
             { name: "Kevin", text: "Fratellì, mi hai salvato la vita. Stavo per prendere un destro allucinante." },
             { name: "Blandiv", text: "Genio assoluto. Ora posso droppare nuove canzoni ndi istagram." },
             { name: "Saro Occhipinti (Modica)", text: "Mi salvasti a vita. Stava partennu un gancio." },
@@ -269,65 +318,87 @@
             { name: "Peppe Cannata (Scicli)", text: "Dona, dona, ca chista è pericolosa assai." },
             { name: "Turi Buscema (Ispica)", text: "Minchia che botta d'acitu... menu mali ca c'è stu situ." },
             { name: "Salvo Ruta (Modica Bassa)", text: "A prima mi pareva na babbata, poi mi arrivau na cinquina." },
-            { name: "Saro (Pozzallo Porto)", text: "Mare mosso forza 9, acidità forza 10. Mi salvai pi miracolo." },
             { name: "Carmelo (Pozzallo)", text: "Stava pì tirarmi na testata, poi si calmau." },
-            { name: "Dott. Gaviscon (Primario)", text: "Unico metodo scientifico per evitare trauma facciale a Frigintini." },
             { name: "L'Americano (Turista)", text: "I don't understand dialects but I donated Gaviscon and I am alive." } 
         ];
 
         let acidLevel = 5000;
-        let donations = Math.floor(Math.random() * 40) + 138; 
+        let maxAcid = 10000;
+        let donations = Math.floor(Math.random() * 70) + 238; 
         let isCooldown = false; 
+        let isGameOver = false;
+        let gameInterval = null;
 
         donationEl.innerText = donations;
 
-        // --- GAME LOOP ---
-        setInterval(() => {
-            // Acidità sale in modo irregolare
-            acidLevel += Math.floor(Math.random() * 25) + 5;
-            updateDisplay();
-        }, 200);
+        // --- FUNZIONE PER AVVIARE/RIAVVIARE IL GIOCO ---
+        function startGame() {
+            if (gameInterval) clearInterval(gameInterval);
+            
+            gameInterval = setInterval(() => {
+                if(isGameOver) return;
 
-        function updateDisplay() {
-            acidEl.innerText = acidLevel;
-            
-            // LOGICA VISIVA "INSANE"
-            
-            // 1. Il pugno diventa più visibile se l'acidità è alta
-            let opacity = Math.min(acidLevel / 10000, 0.8); // Max 0.8 opacità
-            giantFist.style.opacity = opacity;
-            
-            // 2. Il pugno diventa più grande
-            let scale = 1 + (acidLevel / 15000);
-            giantFist.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                acidLevel += Math.floor(Math.random() * 30) + 10;
+                
+                if (acidLevel >= maxAcid) {
+                    triggerGameOver();
+                }
 
-            // 3. Panico Mode
-            if(acidLevel > 8000) { 
-                acidEl.style.color = "red"; 
-                body.classList.add('critical-state'); // Sfondo lampeggia rosso/nero
-                giantFist.innerText = "👊🔥"; // Pugno infuocato
-            }
-            else { 
-                acidEl.style.color = "#ff00ff"; // Fucsia normale
-                body.classList.remove('critical-state');
-                giantFist.innerText = "👊";
-            }
+                updateDisplay();
+            }, 200);
         }
 
-        // --- CLICK (AZIONE PRINCIPALE) ---
+        // Avvio iniziale
+        startGame();
+
+        function updateDisplay() {
+            let displayAcid = acidLevel > maxAcid ? maxAcid : acidLevel;
+            acidEl.innerText = displayAcid;
+            
+            let percentage = (displayAcid / maxAcid) * 100;
+            acidBar.style.width = percentage + "%";
+
+            if(percentage > 75) acidBar.style.backgroundPosition = "100% 0%"; 
+            else acidBar.style.backgroundPosition = "0% 0%"; 
+        }
+
+        // --- GAME OVER + GIF FIX ---
+        function triggerGameOver() {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            gameOverScreen.style.display = "flex";
+            
+            // TRUCCO TIMESTAMP: Aggiunge ?v=random per costringere il browser a ricaricare la GIF
+            let timestamp = new Date().getTime();
+            gifContainer.innerHTML = `<img src="pugno.gif?v=${timestamp}" alt="PUGNO">`;
+        }
+
+        // --- FUNZIONE RESET MIGLIORATA ---
+        // Questa funzione resetta tutto senza dover ricaricare la pagina
+        function resetGame() {
+            isGameOver = false;
+            acidLevel = 5000;
+            isCooldown = false;
+            
+            gameOverScreen.style.display = "none";
+            gifContainer.innerHTML = ""; // Pulisce la GIF per fermarla
+            
+            donaBtn.disabled = false;
+            donaBtn.innerText = activeTexts[0];
+            
+            updateDisplay();
+            startGame(); // Riavvia il loop
+        }
+
+        // --- CLICK ---
         donaBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            if (isCooldown) return;
+            if (isCooldown || isGameOver) return;
 
             isCooldown = true;
             donaBtn.disabled = true; 
 
-            // Screen Shake Effect
-            body.classList.add('shake-screen');
-            setTimeout(() => body.classList.remove('shake-screen'), 300);
-
-            // Abbassa acidità
-            let damage = Math.floor(Math.random() * 400) + 600;
+            let damage = Math.floor(Math.random() * 500) + 700;
             acidLevel -= damage;
             if (acidLevel < 0) acidLevel = 0;
 
@@ -338,16 +409,18 @@
             
             spawnRain();
             
-            // Testo Fluttuante RPG (Floating Damage Text)
-            spawnFloatingText(e.clientX, e.clientY, `-${damage} ACIDITÀ`);
+            let randomWord = hitWords[Math.floor(Math.random() * hitWords.length)];
+            spawnFloatingText(e.clientX, e.clientY, randomWord);
 
             updateDisplay();
 
             setTimeout(() => {
-                isCooldown = false;
-                donaBtn.disabled = false;
-                donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
-            }, 1200); // Leggermente più veloce (1.2s) per più frenesia
+                if(!isGameOver) {
+                    isCooldown = false;
+                    donaBtn.disabled = false;
+                    donaBtn.innerText = activeTexts[Math.floor(Math.random() * activeTexts.length)];
+                }
+            }, 1000); 
         });
 
         // --- FLOATING TEXT ---
@@ -356,11 +429,6 @@
             el.className = 'floating-text';
             el.innerText = text;
             
-            // Colore casuale per il testo
-            const colors = ['#00ff00', '#ffff00', '#00ffff'];
-            el.style.color = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Se clicchi da mobile, x/y potrebbero essere strani, centriamo un po'
             if (!x || !y) {
                 el.style.left = '50%';
                 el.style.top = '40%';
@@ -370,22 +438,21 @@
             }
             
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1000);
+            setTimeout(() => el.remove(), 700);
         }
 
         // --- PIOGGIA ---
         function spawnRain() {
-            const count = 15; 
+            const count = 12; 
             for (let i = 0; i < count; i++) {
                 const img = document.createElement('img');
                 img.src = imageFile;
                 img.classList.add('falling-item');
                 img.style.left = Math.random() * 90 + 'vw'; 
-                img.style.animationDuration = (Math.random() * 0.8 + 0.5) + 's'; // Più veloce!
-                img.style.width = (Math.random() * 30 + 40) + 'px'; 
+                img.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's'; 
+                img.style.width = (Math.random() * 30 + 50) + 'px'; 
                 document.body.appendChild(img);
-                
-                setTimeout(() => { img.remove(); }, 1500); 
+                setTimeout(() => { img.remove(); }, 1000); 
             }
         }
 
@@ -409,7 +476,7 @@
                 slot.innerHTML = `
                     <div class="review-author">${rev.name}</div>
                     <div class="review-text">"${rev.text}"</div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <div class="stars">★★★★★</div>
                 `;
             }
         }
